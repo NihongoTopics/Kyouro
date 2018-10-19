@@ -1,4 +1,5 @@
-//実装していないもの：動名詞、付加部、再帰活用、再帰曲用、述語としての関係節、接続詞、補文標識
+//実装していないもの：動名詞、再帰活用、再帰曲用、述語としての関係節
+//なんか色々間違ってるかもしれないです。ちょいちょい直していきます。
 
 [Clause] := [Sentence]
           | [Relative Clause]
@@ -6,24 +7,38 @@
           | [Complementary Clause]
           | [Nominal Clause]
 
-[Sentence] := [Declarative Sentence]
+[Sentence] := [Adverbial Clause] [Sentence]
+            | [Declarative Sentence]
             | [Imparative Sentence]
             | [Interrogative Sentence]
 
-[Relatieve Clause] := [Relative Verb Phrase]
+[Relatieve Clause] := [Adverbial Clause] [Relative Clause]
+                    | [Relative Verb Phrase]
                     | [Relative Adjective Phrase]
                     | [Relative Noun Phrase]
                     | [Relative Copular Phrase]
                     | [Adnominal Phrase]
                     | [Relatiev Adjectival Noun Phrase]
+                    
+[Adverbial Clause] := [Adverbial Clause] [Adverbial Clause]
+                    | [Conjunction Phrase] 
+                    | [Complementizer Phrase]
+                    | [Adverbial Verb Phrase] 
+                    | [Adverbial Adjective Phrase]
+                    | [Adverbial Noun Phrase] 
+                    | [Adverbial Copular Phrase] 
+                    | [Adverbial Adjectival Noun Phrase] 
 
-[Complementary Clause] := [Complementary Verb Phrase]
+[Complementary Clause] := [Advebrial Clause] [Complementary Clause]
+                        | [Complementary Verb Phrase]
                         | [Complementary Adjective Phrase]
                         | [Complementary Noun Phrase]
                         | [Complementary Copular Phrase]
                         | [Complementary Adjectival Noun Phrase]
 
 [Nominal Clause] := [Relative Clause] [Nominal Clause]
+                  | [Relative Verb Phrase] [Nominizer]
+                  | [Relative Adjective Phrase] [Nominizer] 
                   | [Nominal Verb Phrase]
                   | [Nomianl Adjective Phrase]
                   | [Nominal Noun Phrase]
@@ -39,7 +54,7 @@
 [Question Mark] := . | ? | !?
                  | Empty
 
-[Ending] := Nê | Sâ | Nâ | Empty
+[Ending] := Nê | Sâ | Nâ | yo | monn | Empty
 
 [Declarative Predicate Phrase] := [Declarative Verb Phrase]
                                 | [Declarative Adjective Phrase]
@@ -82,6 +97,17 @@
 [Relative Copular Phrase] := [Ga-predicate Arguments] [Nominal Clause] [Relative Copula] // 「釣りが趣味の」
 [Adnominal Phrase] := [Ga-predicate Arguments] [Adnominal]
 [Relatiev Adjectival Noun Phrase] := [Ga-predicate Arguments] [Relative Adjectivan Noun]
+[Conjunction Phrase] := [Declarative Predicate Phrase] [Conjunction]
+[Complementizer Phrase] := [Quote] [Quotizer]
+[Adverbial Verb Phrase] := [Ga-predicate Arguments] [Adverbial Ga-verb] 
+                         | [Ga-wo-predicate Arguments] [Adverbial Ga-wo-verb] 
+                         | [Ga-ni-predicate Arguments] [Adverbial Ga-ni-verb] 
+                         | [Ga-wo-predicate Argumetns] [Adverbial Ga-wo-ni-verb]
+[Adverbial Adjective Phrase] := [Ga-predicate Arguments] [Adverbial Adjective] 
+[Adverbial Noun Phrase] := [Ga-predicate Arguments] [Adverbial Noun]
+[Adverbial Copular Phrase] := [Ga-predicate Arguments] [Nominal Clause] [Adverbial Copula]
+                            | [Ga-predicate Arguments] [Complementary Clause] [Adverbial Copula] // 「桜が綺麗なんで」
+[Adverbial Adjectival Noun Phrase] := [Ga-predicate Arguments] [Adverbial Adjectival Noun] 
 [Complementary Verb Phrase] := [Ga-predicate Arguments] [Complementary Ga-verb]
                              | [Ga-wo-predicate Arguments] [Complementary Ga-wo-verb]
                              | [Ga-ni-predicate Arguments] [Complementary Ga-ni-verb]
@@ -91,6 +117,7 @@
 [Complementary Copular Phrase] := [Ga-predicate Arguments] [Nominal Clause] [Complementary Copula] // 「家が金持ちなん」
                                 | [Ga-predicate Arguments] [Complementary Clause] [Complementary Copula] //「桜が綺麗なん」
 [Complementary Adjectival Noun Phrase] := [Ga-predicate Arguments] [Complementary Adjectival Noun] // 「髪が綺麗」
+[Nominizer] := 'ka | 'no
 [Nominal Verb Phrase] := [Nomianl Ga-verb]
                        | [Nominal Ga-wo-verb]
                        | [Nominal Ga-ni-verb]
@@ -175,6 +202,33 @@
 [Relative Noun] := [Noun Base] [Relative Noun Ending]
 [Relative Copula] := 'no
 [Relative Adjectival Noun] := [Adjectival Noun Base] [Relative Adjectival Noun Ending]
+[Conjunction] := 'si | 'kara | 'kedo | 'ga
+[Quote] := Anything 
+[Quotizer] := 'tte | 'to
+[Adverbial Ga-verb] := [Ga-verb Plain Base] [Adverbial Plain Verb Ending]
+                     | [Ga-verb Volitional Base] [Adverbial Volitional Verb Ending]
+                     | [Ga-verb Negative Base] [Adverbial Negative Verb Ending] 
+                     | [Ga-verb Infinitive Base] [Adverbial Infinitive Verb Ending]
+                     | [Ga-verb Past Base] [Adverbial Past Base Ending] 
+[Adverbial Ga-wo-verb] := [Ga-wo-verb Plain Base] [Adverbial Plain Verb Ending]
+                        | [Ga-wo-verb Volitional Base] [Adverbial Volitional Verb Ending]
+                        | [Ga-wo-verb Negative Base] [Adverbial Negative Verb Ending] 
+                        | [Ga-wo-verb Infinitive Base] [Adverbial Infinitive Verb Ending]
+                        | [Ga-wo-verb Past Base] [Adverbial Past Base Ending] 
+[Adverbial Ga-ni-verb] := [Ga-ni-verb Plain Base] [Adverbial Plain Verb Ending]
+                        | [Ga-ni-verb Volitional Base] [Adverbial Volitional Verb Ending]
+                        | [Ga-ni-verb Negative Base] [Adverbial Negative Verb Ending] 
+                        | [Ga-ni-verb Infinitive Base] [Adverbial Infinitive Verb Ending]
+                        | [Ga-ni-verb Past Base] [Adverbial Past Base Ending] 
+[Adverbial Ga-wo-ni-verb] := [Ga-wo-ni-verb Plain Base] [Adverbial Plain Verb Ending]
+                           | [Ni-adverbial] [Ga-wo-ni-verb Volitional Base] [Adverbial Volitional Verb Ending]
+                           | [Ni-adverbial] [Ga-wo-ni-verb Negative Base] [Adverbial Negative Verb Ending] 
+                           | [Ni-adverbial] [Ga-wo-ni-verb Infinitive Base] [Adverbial Infinitive Verb Ending]
+                           | [Ni-adverbial] [Ga-wo-ni-verb Past Base] [Adverbial Past Base Ending] 
+[Adverbial Adjective] := [Adjective Base] [Adverbial Adjective Ending] 
+[Adverbial Noun] := [Noun Base] [Adverbial Noun Ending] 
+[Adverbial Copula] := 'de | 'nara | 'desite
+[Adverbial Adjectival Noun] := [Adjectival Noun Base] [Adverbial Adjectival Noun Ending]
 [Complementary Ga-verb] := [Ga-verb Plain Base] [Complementary Plain Verb Ending]
                          | [Ga-verb Infinitive Base] [Complementary Infinitive Verb Ending]
 [Complementary Ga-wo-verb] := [Ga-wo-verb Plain Base] [Complementary Plain Verb Ending]
@@ -226,6 +280,14 @@
 [Relative Adjective Ending] := ·i | ·idarou | ·rasî·i | ·katta | ·kattadarou | ·kattarasî·i | ·karôu | ·gâr·u
 [Relatieve Noun Ending] := -no¹ | -to | -rasî·i
 [Relative Adjectival Noun Ending] := -na | -rasî·i
+[Adverbial Plain Verb Ending] := ·uni | ·usika | ·uto |·eba
+[Adverbial Volitional Verb Ending] := ·ôuni | ·o¹uto⁰
+[Adverbial Negative Verb Ending] := ·naide | ·nakya | ·zu | ·zunî
+[Adverbial Infinitive Verb Ending] := ·tûtu | ·mâsite | ·nâgara
+[Adverbial Past Base Ending] := ·ara | ·e 
+[Adverbial Adjective Ending] := ◌̂·kattara | ◌̂·ku | ◌̂·kute | ◌̂·kereba | ·karôuni
+[Adverbial Noun Ending] := -kara⁰ | -ni | -hodô | -kûrai | -sae | -ø | -ha | -mo | -sika
+[Adverbial Adjectival Noun Ending] := -ni | -ø
 [Complementary Plain Verb Ending] := ·ubêki
 [Complementary Infinitive Verb Ending] := ·so¹u ◌⁰
 [Complementary Adjective Ending] := ·kâttari | ·sa | ·sôu

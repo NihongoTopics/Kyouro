@@ -54,7 +54,7 @@
 [Question Mark] := . | ? | !?
                  | Empty
 
-[Ending] := Nê | Sâ | Nâ | yo | monn | Empty
+[Ending] := Nê | Sâ | Nâ | 'yo | 'monn | Empty
 
 [Declarative Predicate Phrase] := [Declarative Verb Phrase]
                                 | [Declarative Adjective Phrase]

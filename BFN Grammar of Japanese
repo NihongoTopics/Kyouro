@@ -1,0 +1,285 @@
+//実装していないもの：動名詞、付加部、再帰活用、再帰曲用、述語としての関係節
+
+[Clause] := [Sentence]
+          | [Relative Clause]
+          | [Adverbial Clause]
+          | [Complementary Clause]
+          | [Nominal Clause]
+
+[Sentence] := [Declarative Sentence]
+            | [Imparative Sentence]
+            | [Interrogative Sentence]
+
+[Relatieve Clause] := [Relative Verb Phrase]
+                    | [Relative Adjective Phrase]
+                    | [Relative Noun Phrase]
+                    | [Relative Copular Phrase]
+                    | [Adnominal Phrase]
+                    | [Relatiev Adjectival Noun Phrase]
+
+[Complementary Clause] := [Complementary Verb Phrase]
+                        | [Complementary Adjective Phrase]
+                        | [Complementary Noun Phrase]
+                        | [Complementary Copular Phrase]
+                        | [Complementary Adjectival Noun Phrase]
+
+[Nominal Clause] := [Relative Clause] [Nominal Clause]
+                  | [Nominal Verb Phrase]
+                  | [Nomianl Adjective Phrase]
+                  | [Nominal Noun Phrase]
+                  | [Nominal Copular Phrase]
+                  | [Nomianl Adjectival Noun Phrase]
+
+[Declarative Sentence] := [Declarative Predicate Phrase] [Ending] [Period]
+[Imparative Sentence] := [Imparative Predicate Phrase] [Ending] [Period]
+[Interrogative Sentence] := [Interrogative Predicate Phrase] [Ending] [Question Mark]
+
+[Period] := . | !
+[Question Mark] := . | ? | !?
+
+[Ending] := Nê | Sâ | Nâ | Empty
+
+[Declarative Predicate Phrase] := [Declarative Verb Phrase]
+                                | [Declarative Adjective Phrase]
+                                | [Declarative Copular Phrase]
+[Imparative Predicate Phrase] := [Imparative Verb Phrase]
+                               | [Imparative Adjective Phrase]
+[Interrogative Predicate Phrase] := [Interrogative Verb Phrase]
+                                  | [Interrogative Adjective Phrase]
+                                  | [Interrogative Copular Phrase]
+
+[Declarative Verb Phrase] := [Relative Verb Phrase]
+                           | [Ga-predicate Arguments] [Declarative Ga-verb]
+                           | [Ga-wo-predicaete Arguments] [Declarative Ga-wo-verb]
+                           | [Ga-ni-predicate Arguments] [Declarative Ga-ni-verb]
+                           | [Ga-wo-predicate Arguments] [Declarative Ga-wo-ni-verb]
+[Declarative Adjective Phrase] := [Ga-predicate Arguments] [Declarative Adjective]
+[Declarative Copular Phrase] := [Ga-predicate Arguments] [Nominal Clause] [Declarative Copula] // 「あれは本です」
+                              | [Ga-predicate Arguments] [Complementary Clause] [Declarative Copula] // 「彼女は綺麗です」
+[Imparative Verb Phrase] := [Ga-predicate Arguments] [Imparative Ga-verb]
+                          | [Ga-wo-predicaete Arguments] [Imparative Ga-wo-verb]
+                          | [Ga-ni-predicate Arguments] [Imparative Ga-ni-verb]
+                          | [Ga-wo-predicate Arguments] [Imparative Ga-wo-ni-verb]
+[Imparative Adjective Phrase] := [Ga-predicate Arguments] [Imparative Adjective]
+[Interrogative Verb Phrase] := [Declarative Verb Phrase]
+                             | [Imparative Verb Phrase]
+                             | [Ga-predicate Arguments] [Interrogative Ga-verb]
+                             | [Ga-wo-predicaete Arguments] [Interrogative Ga-wo-verb]
+                             | [Ga-ni-predicate Arguments] [Interrogative Ga-ni-verb]
+                             | [Ga-wo-predicate Arguments] [Interrogative Ga-wo-ni-verb]
+[Interrogative Adjective Phrase] := [Declarative Adjective Phrase]
+                                  | [Ga-predicate Arguments] [Interrogative Adjective]
+[Interrogative Copular Phrase] := [Ga-predicate Arguments] [Nominal Clause] [Interrogative Copula] // 「あれは東京タワーですか？」
+                                | [Ga-predicate Arguments] [Complementary Clause] [Interrogative Copula] // 「お母さんはお元気ですか？」
+[Relative Verb Phrase] := [Ga-predicate Arguments] [Relative Ga-verb]
+                        | [Ga-wo-predicate Arguments] [Relative Ga-wo-verb]
+                        | [Ga-ni-predicate Arguments] [Relative Ga-ni-verb]
+                        | [Ga-wo-predicate Arguments] [Relative Ga-wo-ni-verb]
+[Relative Adjective Phrase] := [Ga-predicate Arguments] [Relative Adjective]
+[Relative Noun Phrase] := [Ga-predicate Arguments] [Relative Noun]
+[Relative Copular Phrase] := [Ga-predicate Arguments] [Nominal Clause] [Relative Copula] // 「釣りが趣味の」
+[Adnominal Phrase] := [Ga-predicate Arguments] [Adnominal]
+[Relatiev Adjectival Noun Phrase] := [Ga-predicate Arguments] [Relative Adjectivan Noun]
+[Complementary Verb Phrase] := [Ga-predicate Arguments] [Complementary Ga-verb]
+                             | [Ga-wo-predicate Arguments] [Complementary Ga-wo-verb]
+                             | [Ga-ni-predicate Arguments] [Complementary Ga-ni-verb]
+                             | [Ga-wo-predicate Arguments] [Complementary Ga-wo-ni-verb]
+[Complementary Adjective Phrase] := [Ga-predicate Arguments] [Complementary Adjective]
+[Complementary Noun Phrase] := [Ga-predicate Arguments] [Complementary Noun]
+[Complementary Copular Phrase] := [Ga-predicate Arguments] [Nominal Clause] [Complementary Copula] // 「家が金持ちなん」
+                                | [Ga-predicate Arguments] [Complementary Clause] [Complementary Copula] //「桜が綺麗なん」
+[Complementary Adjectival Noun Phrase] := [Ga-predicate Arguments] [Complementary Adjectival Noun] // 「髪が綺麗」
+[Nominal Verb Phrase] := [Nomianl Ga-verb]
+                       | [Nominal Ga-wo-verb]
+                       | [Nominal Ga-ni-verb]
+                       | [Nominal Ga-wo-ni-verb]
+[Nominal Adjective Phrase] := [Nominal Adjective]
+[Nominal Noun Phrase] := [Nominal Noun]
+[Nominal Copular Phrase] := [Nominal Clause] [Nominal Copula]
+                          | [Complementary Clause] [Nominal Copula]
+[Nominal Adjectival Noun Phrase] := [Nominal Adjectival Noun]
+
+[Declarative Ga-verb] := [Ga-verb Plain Base] [Declarative Plain Verb Ending]
+                       | [Ga-verb Infinitive Base] [Declarative Infinitive Verb Ending]
+                       | [Ga-verb Past Base] [Declarative Past Verb Ending]
+[Declarative Ga-wo-verb] := [Ga-wo-verb Plain Base] [Declarative Plain Verb Ending]
+                          | [Ga-wo-verb Infinitive Base] [Declarative Infinitive Verb Ending]
+                          | [Ga-wo-verb Past Base] [Declarative Past Verb Ending]
+[Declarative Ga-ni-verb] := [Ga-ni-verb Plain Base] [Declarative Plain Verb Ending]
+                          | [Ga-ni-verb Infinitive Base] [Declarative Infinitive Verb Ending]
+                          | [Ga-ni-verb Past Base] [Declarative Past Verb Ending]
+[Declarative Ga-wo-ni-verb] :=[Ni-adverbial Phrase] [Ga-wo-ni-verb Plain Base] [Declarative Plain Verb Ending]
+                             | [Ni-adverbial Phrase] [Ga-wo-ni-verb Infinitive Base] [Declarative Infinitive Verb Ending]
+                             | [Ni-adverbial Phrase] [Ga-wo-ni-verb Past Base] [Declarative Past Verb Ending]
+[Declarative Adjective] := [Relative Adjective]
+                         | [Adjective Base] [Declarative Adjective Ending]
+[Declarative Copula] := 'desu | 'desita | 'desyou | 'dattadesyou | 'da | 'datta | 'darou | 'dattadarou
+[Imparative Ga-verb] := [Ga-verb Plain Base] [Imparative Plain Verb Ending]
+                      | [Ga-verb Volitional Base] [Imparative Volitional Verb Ending]
+                      | [Ga-verb Negative Base] [Imparative Negative Verb Ending]
+                      | [Ga-verb Infinitive Base] [Imparative Infinitive Verb Ending]
+                      | [Ga-verb Past Base] [Imparative Past Verb Ending]
+[Imparative Ga-wo-verb] := [Ga-wo-verb Plain Base] [Imparative Plain Verb Ending]
+                         | [Ga-wo-verb Volitional Base] [Imparative Volitional Verb Ending]
+                         | [Ga-wo-verb Negative Base] [Imparative Negative Verb Ending]
+                         | [Ga-wo-verb Infinitive Base] [Imparative Infinitive Verb Ending]
+                         | [Ga-wo-verb Past Base] [Imparative Past Verb Ending]
+[Imparative Ga-ni-verb] := [Ga-ni-verb Plain Base] [Imparative Plain Verb Ending]
+                         | [Ga-ni-verb Volitional Base] [Imparative Volitional Verb Ending]
+                         | [Ga-ni-verb Negative Base] [Imparative Negative Verb Ending]
+                         | [Ga-ni-verb Infinitive Base] [Imparative Infinitive Verb Ending]
+                         | [Ga-ni-verb Past Base] [Imparative Past Verb Ending]
+[Imparative Ga-wo-ni-verb] := [Ni-adverbial Phrase] [Ga-wo-ni-verb Plain Base] [Imparative Plain Verb Ending]
+                            | [Ni-adverbial Phrase] [Ga-wo-ni-verb Volitional Base] [Imparative Volitional Verb Ending]
+                            | [Ni-adverbial Phrase] [Ga-wo-ni-verb Negative Base] [Imparative Negative Verb Ending]
+                            | [Ni-adverbial Phrase] [Ga-wo-ni-verb Infinitive Base] [Imparative Infinitive Verb Ending]
+                            | [Ni-adverbial Phrase] [Ga-wo-ni-verb Past Base] [Imparative Past Verb Ending]
+[Imparative Adjective] := [Adjective Base] [Imparative Adjective Ending]
+[Interrogative Ga-verb] := [Ga-verb Plain Base] [Interrogative Plain Verb Ending]
+                         | [Ga-verb Infinitive Base] [Interrogative Infinitive Verb Ending]
+                         | [Ga-verb Past Base] [Interrogative Past Verb Ending]
+[Interrogative Ga-wo-verb] := [Ga-wo-verb Plain Base] [Interrogative Plain Verb Ending]
+                            | [Ga-wo-verb Infinitive Base] [Interrogative Infinitive Verb Ending]
+                            | [Ga-wo-verb Past Base] [Interrogative Past Verb Ending]
+[Interrogative Ga-ni-verb] := [Ga-ni-verb Plain Base] [Interrogative Plain Verb Ending]
+                            | [Ga-ni-verb Infinitive Base] [Interrogative Infinitive Verb Ending]
+                            | [Ga-ni-verb Past Base] [Interrogative Past Verb Ending]
+[Interrogative Ga-wo-ni-verb] := [Ni-adverbial Phrase] [Ga-wo-ni-verb Plain Base] [Interrogative Plain Verb Ending]
+                               | [Ni-adverbial Phrase] [Ga-wo-ni-verb Infinitive Base] [Interrogative Infinitive Verb Ending]
+                               | [Ni-adverbial Phrase] [Ga-wo-ni-verb Past Base] [Interrogative Past Verb Ending]
+[Interrogative Adjective] := [Adjective Base] [Interrogative Adjective Ending]
+[Interrogative Copula] := 'desuka | 'desitaka | 'desyouka | 'ka | 'dattaka | 'dattadarouka
+[Relative Ga-verb] := [Ga-verb Plain Base] [Relative Plain Verb Ending]
+                    | [Ga-verb Causative Base] [Relative Causative Verb Ending]
+                    | [Ga-verb Negative Base] [Relative Negative Verb Ending]
+                    | [Ga-verb Infinitive Base] [Relative Infinitive Verb Ending]
+                    | [Ga-verb Past Base] [Relatiev Past Verb Ending]
+[Relative Ga-wo-verb] := [Ga-wo-verb Plain Base] [Relative Plain Verb Ending]
+                       | [Ga-wo-verb Causative Base] [Relative Causative Verb Ending]
+                       | [Ga-wo-verb Negative Base] [Relative Negative Verb Ending]
+                       | [Ga-wo-verb Infinitive Base] [Relative Infinitive Verb Ending]
+                       | [Ga-wo-verb Past Base] [Relative Past Verb Ending]
+[Relative Ga-ni-verb] := [Ga-ni-verb Plain Base] [Relative Plain Verb Ending]
+                       | [Ga-ni-verb Causative Base] [Relative Causative Verb Ending]
+                       | [Ga-ni-verb Negative Base] [Relative Negative Verb Ending]
+                       | [Ga-ni-verb Infinitive Base] [Relative Infinitive Verb Ending]
+                       | [Ga-ni-verb Past Base] [Relative Past Verb Ending]
+[Relative Ga-wo-ni-verb] := [Ni-adverbial Phrase] [Ga-wo-ni-verb Plain Base] [Relative Plain Verb Ending]
+                          | [Ni-adverbial Phrase] [Ga-wo-ni-verb Causative Base] [Relative Causative Verb Ending]
+                          | [Ni-adverbial Phrase] [Ga-wo-ni-verb Negative Base] [Relative Negative Verb Ending]
+                          | [Ni-adverbial Phrase] [Ga-wo-ni-verb Infinitive Base] [Relative Infinitive Verb Ending]
+                          | [Ni-adverbial Phrase] [Ga-wo-ni-verb Past Base] [Relative Past Verb Ending]
+[Relative Adjective] := [Adjective Base] [Relateive Adjective Ending]
+[Relative Noun] := [Noun Base] [Relative Noun Ending]
+[Relative Copula] := 'no
+[Relative Adjectival Noun] := [Adjectival Noun Base] [Relative Adjectival Noun Ending]
+[Complementary Ga-verb] := [Ga-verb Plain Base] [Complementary Plain Verb Ending]
+                         | [Ga-verb Infinitive Base] [Complementary Infinitive Verb Ending]
+[Complementary Ga-wo-verb] := [Ga-wo-verb Plain Base] [Complementary Plain Verb Ending]
+                            | [Ga-wo-verb Infinitive Base] [Complementary Infinitive Verb Ending]
+[Complementary Ga-ni-verb] := [Ga-ni-verb Plain Base] [Complementary Plain Verb Ending]
+                            | [Ga-ni-verb Infinitive Base] [Complementary Infinitive Verb Ending]
+[Complementary Ga-wo-ni-verb] := [Ni-adverbial Phrase] [Ga-wo-ni-verb Complementary Base] [Complementary Plain Verb Ending]
+                               | [Ni-adverbial Phrase] [Ga-wo-ni-verb Complementary Base] [Complementary Infinitive Verb Ending]
+[Complementary Adjective] := [Adjective Base] [Complementary Adjective Ending]
+[Complementary Noun] := [Noun Base] [Complementary Noun Ending]
+[Complementary Copula] := 'nann
+[Complementary Adjectival Noun] := [Adjectival Noun Base] [Complementary Adjectival Noun Ending]
+[Nomianl Ga-verb] := [Ga-verb Infinitive Base] [Nominal Infinitive Verb Ending]
+                   | [Ga-verb Past Base] [Nominal Past Verb Ending]
+[Nominal Ga-wo-verb] := [Ga-wo-verb Infinitive Base] [Nominal Infinitive Verb Ending]
+                      | [Ga-wo-verb Past Base] [Nominal Past Verb Ending]
+[Nominal Ga-ni-verb] := [Ga-ni-verb Infinitive Base] [Nominal Infinitive Verb Ending]
+                      | [Ga-ni-verb Past Base] [Nominal Past Verb Ending]
+[Nominal Ga-wo-ni-verb] := [Ga-wo-ni-verb Infinitive Base] [Nominal Infinitive Verb Ending]
+                         | [Ga-wo-ni-verb Past Base] [Nominal Past Verb Ending]
+[Nominal Adjective] := [Adjective Base] [Nominal Adjective Ending]
+[Nominal Noun] := [Noun Base] [Nominal Noun Ending]
+[Nominal Copula] := 'nano
+[Nominal Adjectival Noun] := [Adjectival Noun Base] [Nominal Adjectival Noun Ending]
+
+[Ni-adverbial Phrase] := [Nominal Clause] -ni
+                       | [Compelemtary Clause] -ni
+                       | Empty
+
+[Declarative Plain Verb Ending] := ·udarou | ·udesyou
+[Declarative Infinitive Verb Ending] := ·mâsu | ·masênn | ·masênndesita | ·mâsita
+[Declarative Past Verb Ending] := ·âdesyou | ·âdarou
+[Declarative Adjective Ending] := ·idesu | ·idesyou | ·kattadesyou
+[Imparative Plain Verb Ending] := ·ûna | ·ûnayo | ·o | ·oyo
+[Imparative Volitional Verb Ending] := ·ôu | ·ôuyo
+[Imparative Negative Verb Ending] := ·naide | ·naideyo
+[Imparative Infinitive Verb ENding] := ·masyôu | ·masyôuyo | ·nâ | ·nâyo
+[Imparative Past Verb Ending] := ·e | ·eyo
+[Imparative Adjective Ending] := ·u
+[Interrogative Plain Verb Ending] := ·udarouka | ·udesyouka
+[Interrogative Infinitive Verb Ending] := ·mâsuka | ·mâsudesyouka | ·masênnka | ·masênndesitaka | ·mâsitaka | ·mâsitadesyouka | ·masyôuka
+[Interrogative Past Verb Ending] := ·âdesyouka
+[Interrogative Adjective Ending] := ·idesuka | ·idesyouka | ·idarouka | ·kattadesuka | ·kattadesyouka
+[Relative Plain Verb Ending] := ·u | ·urasî·i | ·ubêki | ·aręr·û | ·ęr·û
+[Relative Causative Verb Ending] := ·as·û | ·asęr·û
+[Relative Negative Verb Ending] := ·na·î
+[Relative Infinitive Verb Ending] := ·tâ·i
+[Relative Past Verb Ending] := ·a | ·rasî·i
+[Relative Adjective Ending] := ·i | ·idarou | ·rasî·i | ·katta | ·kattadarou | ·kattarasî·i | ·karôu | ·gâr·u
+[Relatieve Noun Ending] := -no¹ | -to | -rasî·i
+[Relative Adjectival Noun Ending] := -na | -rasî·i
+[Complementary Plain Verb Ending] := ·ubêki
+[Complementary Infinitive Verb Ending] := ·so¹u ◌⁰
+[Complementary Adjective Ending] := ·kâttari | ·sa | ·sôu
+[Complementary Noun Ending] := -kara⁰ | -made | -no¹ | -hodô | -nado | -kûrai
+                             | Empty
+[Complementary Adjectival Noun Ending] := -sôu
+                                        | Empty
+[Nominal Infinitive Verb Ending] := ·kake | ·ppanasi
+                                  | Empty
+[Nominal Past Verb Ending] := ·ari | ·ekara | ·emade
+[Nominal Adjective Ending] := ◌̂·kattari | ·sa
+[Nominal Noun Ending] := -kara⁰ | -made | -no¹ | -nado | -kûrai | -koso
+                       | Empty
+[Nominal Adjectival Noun Ending] := ◌²⁺-sa
+
+[Ga-predicate Arguments] := [Ga-phrase]
+[Ga-wo-predicate Arguments] := [Ga-phrase] [Wo-phrase]
+[Ga-ni-predicate Arguments] := [Ga-phrase] [Ni-phrase]
+
+[Ga-phrase] := [Nominal Clause] [Ga-article] | Empty
+[Wo-phrase] := [Nominal Clause] [Wo-article] | Empty
+[Ni-phrase] := [Nominal Clause] [Ni-article] | Empty
+
+[Ga-article] := 'ha | 'mo | 'ø | 'ga
+[Wo-article] := 'ha | 'mo | 'ø | 'wo
+[Ni-article] := 'niha | 'ha | 'nimo | 'mo | 'ø | 'ni
+
+
+// Content words
+
+[Ga-verb Plain Base] :=
+[Ga-verb Volitional Base] :=
+[Ga-verb Negative Base] :=
+[Ga-verb Infinitive Base] :=
+[Ga-verb Past Base] :=
+
+[Ga-wo-verb Plain Base] :=
+[Ga-wo-verb Volitional Base] :=
+[Ga-wo-verb Negative Base] :=
+[Ga-wo-verb Infinitive Base] :=
+[Ga-wo-verb Past Base] :=
+
+[Ga-ni-verb Plain Base] :=
+[Ga-ni-verb Volitional Base] :=
+[Ga-ni-verb Negative Base] :=
+[Ga-ni-verb Infinitive Base] :=
+[Ga-ni-verb Past Base] :=
+
+[Ga-wo-ni-verb Plain Base] :=
+[Ga-wo-ni-verb Volitional Base] :=
+[Ga-wo-ni-verb Negative Base] :=
+[Ga-wo-ni-verb Infinitive Base] :=
+[Ga-wo-ni-verb Past Base] :=
+
+[Adjective Base] :=
+[Noun Base] :=
+
+[Adjectival Noun Base] :=
+[Adnominal] :=

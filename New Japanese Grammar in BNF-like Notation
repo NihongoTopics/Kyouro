@@ -35,7 +35,9 @@
 [Interrogative Sentence] := [Interrogative Predicate Phrase] [Ending] [Question Mark]
 
 [Period] := . | !
+          | Empty
 [Question Mark] := . | ? | !?
+                 | Empty
 
 [Ending] := Nê | Sâ | Nâ | Empty
 

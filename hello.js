@@ -42,10 +42,6 @@ function AdjectivePhrase(spelling, meaning){
 function idesu(adjectiveBase, articlePhrase){
   var spelling = articlePhrase.spelling + " " + adjectiveBase.spelling + "·idesu";
   var meaning; 
-  if (articlePhrase.definitiveness == "definitive"){
-    meaning = "The room is cold"; 
-  }else{
-    meaning = "A room is cold";
-  }
+  var meaning = articlePhrase.definitiveness == "definitive" ? "The room is cold" : "A room is cold"; 
   return new AdjectivePhrase(spelling, meaning);
 }

@@ -21,7 +21,7 @@ function ArticlePhrase(article, noun){
 function ga(noun){
   var article = {
     spelling: "ga", 
-    definitiveness: "definitive",
+    definitiveness: "indefinitive",
     case: "doer"
   };
   return new ArticlePhrase(article, noun); 
@@ -43,9 +43,9 @@ function idesu(adjectiveBase, articlePhrase){
   var spelling = articlePhrase.spelling + " " + adjectiveBase.spelling + "·idesu";
   var meaning; 
   if (articlePhrase.definitiveness == "definitive"){
-    meaning = "A room is cold"; 
+    meaning = "The room is cold"; 
   }else{
-    meaning = "The room is cold";
+    meaning = "A room is cold";
   }
   return new AdjectivePhrase(spelling, meaning);
 }

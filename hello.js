@@ -1,5 +1,5 @@
 
-var s = "Heyâ'ga Samû·idesu."
+var s = "Heyâ'ga Samû·idesu.";
 
 function Noun(spelling, meaning, animacy){
   this.spelling = spelling;

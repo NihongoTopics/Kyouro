@@ -20,9 +20,9 @@ function ArticlePhrase(article, noun){
  
 function ga(noun){
   var article = {
-    spelling = "'ga"; 
-    definitiveness = "definitive"; 
-    case = "doer"
+    spelling: "ga"; 
+    definitiveness: "definitive"; 
+    grammaticalCase: "doer"; 
   }
   return new ArticlePhrase(article, noun); 
 }

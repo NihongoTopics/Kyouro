@@ -1,6 +1,5 @@
 javascript:(function() {
     const conversionMap = {
-    "i": "ı",
     "f": "ˈ",
 	"v": "ˌ",
 	"`": "ˋ",
@@ -9,7 +8,7 @@ javascript:(function() {
 	"q": "ȧ", 
 	"c": "ė",
 	"l": "ȯ",
-	"j": "i"
+	"j": "ı"
     };
 
     const inputElements = document.querySelectorAll('input, textarea');

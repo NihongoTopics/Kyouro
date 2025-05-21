@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>RPN → LaTeX</title>
+  <style>
+    body { font-family: sans-serif; margin: 2em; }
+    textarea, pre { width: 100%; box-sizing: border-box; }
+    textarea { height: 4em; }
+    button { margin: 1em 0; padding: 0.5em 1em; }
+    pre { background: #f5f5f5; padding: 1em; white-space: pre-wrap; }
+  </style>
+</head>
+<body>
+
+  <h1>RPN to LaTeX Converter</h1>
+
+  <label for="input">Enter RPN (no spaces needed around <code>\</code>):</label>
+  <textarea id="input" placeholder="e.g. A B\ C\ or A B\ D E\ \ "></textarea>
+
+  <button onclick="convert()">Convert</button>
+
+  <h2>Output LaTeX</h2>
+  <pre id="output"></pre>
+
+  <script>
+    function convert() {
+      const text = document.getElementById('input').value.trim();
+      // split into tokens: each '\' or each run of non-space non-'\'
+      const tokens = text.match(/\\|[^\\\s]+/g) || [];
+      const stack = [];
+
+      tokens.forEach(tok => {
+        if (tok === '\\') {
+          const right = stack.pop() || '';
+          const left  = stack.pop() || '';
+          stack.push('\\overline{' + left + '\\text{ }' + right + '}');
+        } else {
+          // atomic: wrap in \text{…}
+          // escape any } or { in tok if needed (not done here for simplicity)
+          stack.push('\\text{' + tok + '}');
+        }
+      });
+
+      document.getElementById('output').textContent =
+        stack.length === 1 ? stack[0] : '⚠️ malformed RPN';
+    }
+  </script>
+
+</body>
+</html>

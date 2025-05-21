@@ -15,7 +15,7 @@
 
   <h1>RPN to LaTeX Converter</h1>
 
-  <label for="input">Enter RPN (no spaces needed around <code>\</code>):</label>
+  <label for="input">Enter RPN:</label>
   <textarea id="input" placeholder="e.g. A B\ C\ or A B\ D E\ \ "></textarea>
 
   <button onclick="convert()">Convert</button>
@@ -37,7 +37,6 @@
           stack.push('\\overline{' + left + '\\text{ }' + right + '}');
         } else {
           // atomic: wrap in \text{…}
-          // escape any } or { in tok if needed (not done here for simplicity)
           stack.push('\\text{' + tok + '}');
         }
       });

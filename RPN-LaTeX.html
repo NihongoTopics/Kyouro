@@ -18,7 +18,7 @@
   <h1>RPN to LaTeX Converter</h1>
 
   <label for="input">Enter RPN:</label>
-  <textarea id="input" placeholder="e.g. A[V] B D[E] \ ">I[N] love[V] cats[N]\[VP]\[S]</textarea>
+  <textarea id="input" placeholder="e.g. A[V] B D[E] "></textarea>
 
   <button onclick="convert()">Convert</button>
 
@@ -31,6 +31,21 @@
   </div>
 
   <script>
+    // Read 'input' param from URL
+    function getInputFromUrl() {
+      const params = new URLSearchParams(window.location.search);
+      return params.get('input') || '';
+    }
+
+    // Update URL without reloading
+    function updateUrl(text) {
+      const params = new URLSearchParams(window.location.search);
+      if (text) params.set('input', text);
+      else params.delete('input');
+      const newUrl = window.location.pathname + '?' + params.toString();
+      window.history.replaceState(null, '', newUrl);
+    }
+
     // Escape special LaTeX characters inside \text{...}
     function escapeLatexText(str) {
       return str.replace(/([#$%&_{}~^\\])/g, "\\$1");
@@ -38,26 +53,26 @@
 
     // Convert an RPN expression with optional labels to a LaTeX string
     function convert() {
-      const text = document.getElementById('input').value.trim();
+      const textarea = document.getElementById('input');
+      const text = textarea.value.trim();
+
+      // Tokenize: backslash operator, labels [..], or atomics
       const rawTokens = text.match(/\\|\[[^\]]+\]|[^\\\s\[]+/g) || [];
       const stack = [];
 
       rawTokens.forEach(tok => {
         const labelMatch = tok.match(/^\[([^\]]+)\]$/);
         if (labelMatch) {
-          // Attach label to last item
           if (stack.length === 0) return;
           const lbl = labelMatch[1];
           const item = stack.pop();
           const labeled = `\\overset{\\text{${escapeLatexText(lbl)}}}{${item}}`;
           stack.push(labeled);
         } else if (tok === '\\') {
-          // Overline operator: pop two items
           const right = stack.pop() || '';
           const left  = stack.pop() || '';
           stack.push(`\\overline{${left}\\text{ }${right}}`);
         } else {
-          // Atomic token: wrap in \text{...}
           stack.push(`\\text{${escapeLatexText(tok)}}`);
         }
       });
@@ -65,7 +80,6 @@
       const latex = stack.length === 1 ? stack[0] : '';
       document.getElementById('output').textContent = latex || '⚠️ malformed RPN';
 
-      // Live preview
       const img = document.getElementById('latex-preview');
       if (latex) {
         img.src = 'https://latex.codecogs.com/png.latex?' + encodeURIComponent(latex);
@@ -74,10 +88,18 @@
         img.src = '';
         img.alt = 'No preview';
       }
+
+      // Sync URL param
+      updateUrl(text);
     }
 
-    // Auto-run on load
-    window.onload = convert;
+    // Init on load
+    window.onload = () => {
+      const initial = getInputFromUrl();
+      const textarea = document.getElementById('input');
+      textarea.value = initial || 'I[N] love[V] cats[N]\\[VP]\\[S]';
+      convert();
+    };
   </script>
 
 </body>

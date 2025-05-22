@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>RPN → LaTeX with Labels</title>
+  <title>RPN → LaTeX Converter</title>
   <style>
     body { font-family: sans-serif; margin: 2em; }
     textarea, pre { width: 100%; box-sizing: border-box; }
@@ -18,7 +18,7 @@
   <h1>RPN to LaTeX Converter</h1>
 
   <label for="input">Enter RPN:</label>
-  <textarea id="input" placeholder="e.g. A[V] B D[E] \ "></textarea>
+  <textarea id="input" placeholder="e.g. A[V] B D[E] \ ">I[N] love[V] cats[N]\[VP]\[S]</textarea>
 
   <button onclick="convert()">Convert</button>
 
@@ -75,6 +75,9 @@
         img.alt = 'No preview';
       }
     }
+
+    // Auto-run on load
+    window.onload = convert;
   </script>
 
 </body>

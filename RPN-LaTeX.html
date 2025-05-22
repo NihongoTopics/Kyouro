@@ -31,13 +31,11 @@
   </div>
 
   <script>
-    // Read 'input' param from URL
     function getInputFromUrl() {
       const params = new URLSearchParams(window.location.search);
       return params.get('input') || '';
     }
 
-    // Update URL without reloading
     function updateUrl(text) {
       const params = new URLSearchParams(window.location.search);
       if (text) params.set('input', text);
@@ -46,17 +44,13 @@
       window.history.replaceState(null, '', newUrl);
     }
 
-    // Escape special LaTeX characters inside \text{...}
     function escapeLatexText(str) {
       return str.replace(/([#$%&_{}~^\\])/g, "\\$1");
     }
 
-    // Convert an RPN expression with optional labels to a LaTeX string
     function convert() {
       const textarea = document.getElementById('input');
       const text = textarea.value.trim();
-
-      // Tokenize: backslash operator, labels [..], or atomics
       const rawTokens = text.match(/\\|\[[^\]]+\]|[^\\\s\[]+/g) || [];
       const stack = [];
 
@@ -65,15 +59,25 @@
         if (labelMatch) {
           if (stack.length === 0) return;
           const lbl = labelMatch[1];
+          let latexLabel;
+          if (lbl.includes('\\') || lbl.includes('/') || lbl.includes('|')) {
+            latexLabel = lbl.split('').map(ch => {
+              if (ch === '\\') return ' \\backslash ';
+              if (ch === '/') return '/';
+              if (ch === '|') return '|';
+              return ch;
+            }).join('');
+          } else {
+            latexLabel = '\\text{' + escapeLatexText(lbl) + '}';
+          }
           const item = stack.pop();
-          const labeled = `\\overset{\\text{${escapeLatexText(lbl)}}}{${item}}`;
-          stack.push(labeled);
+          stack.push('\\overset{' + latexLabel + '}{' + item + '}');
         } else if (tok === '\\') {
           const right = stack.pop() || '';
           const left  = stack.pop() || '';
-          stack.push(`\\overline{${left}\\text{ }${right}}`);
+          stack.push('\\overline{' + left + '\\text{ }' + right + '}');
         } else {
-          stack.push(`\\text{${escapeLatexText(tok)}}`);
+          stack.push('\\text{' + escapeLatexText(tok) + '}');
         }
       });
 
@@ -88,16 +92,13 @@
         img.src = '';
         img.alt = 'No preview';
       }
-
-      // Sync URL param
       updateUrl(text);
     }
 
-    // Init on load
     window.onload = () => {
       const initial = getInputFromUrl();
       const textarea = document.getElementById('input');
-      textarea.value = initial || 'I[N] love[V] cats[N]\\[VP]\\[S]';
+      textarea.value = initial || 'I[N] love[V] dogs[N]\\[NP]\\[S]';
       convert();
     };
   </script>

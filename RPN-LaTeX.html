@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>RPN → LaTeX</title>
+  <title>RPN → LaTeX with Labels</title>
   <style>
     body { font-family: sans-serif; margin: 2em; }
     textarea, pre { width: 100%; box-sizing: border-box; }
@@ -18,7 +18,7 @@
   <h1>RPN to LaTeX Converter</h1>
 
   <label for="input">Enter RPN:</label>
-  <textarea id="input" placeholder="e.g. A B\ C\ or A B\ D E\ \ "></textarea>
+  <textarea id="input" placeholder="e.g. A[V] B D[E] \ "></textarea>
 
   <button onclick="convert()">Convert</button>
 
@@ -31,35 +31,43 @@
   </div>
 
   <script>
-    // Escapes special LaTeX characters inside \text{...}
+    // Escape special LaTeX characters inside \text{...}
     function escapeLatexText(str) {
-      return str.replace(/([#$%&_{}~^\\])/g, '\\$1');
+      return str.replace(/([#$%&_{}~^\\])/g, "\\$1");
     }
 
+    // Convert an RPN expression with optional labels to a LaTeX string
     function convert() {
       const text = document.getElementById('input').value.trim();
-      // split into tokens: each '\' or each run of non-space non-'\'
-      const tokens = text.match(/\\|[^\\\s]+/g) || [];
+      const rawTokens = text.match(/\\|\[[^\]]+\]|[^\\\s\[]+/g) || [];
       const stack = [];
 
-      tokens.forEach(tok => {
-        if (tok === '\\') {
+      rawTokens.forEach(tok => {
+        const labelMatch = tok.match(/^\[([^\]]+)\]$/);
+        if (labelMatch) {
+          // Attach label to last item
+          if (stack.length === 0) return;
+          const lbl = labelMatch[1];
+          const item = stack.pop();
+          const labeled = `\\overset{\\text{${escapeLatexText(lbl)}}}{${item}}`;
+          stack.push(labeled);
+        } else if (tok === '\\') {
+          // Overline operator: pop two items
           const right = stack.pop() || '';
           const left  = stack.pop() || '';
-          stack.push('\\overline{' + left + '\\text{ }' + right + '}');
+          stack.push(`\\overline{${left}\\text{ }${right}}`);
         } else {
-          // atomic: wrap in \text{…} and escape special chars
-          stack.push('\\text{' + escapeLatexText(tok) + '}');
+          // Atomic token: wrap in \text{...}
+          stack.push(`\\text{${escapeLatexText(tok)}}`);
         }
       });
 
       const latex = stack.length === 1 ? stack[0] : '';
-      document.getElementById('output').textContent =
-        latex || '⚠️ malformed RPN';
+      document.getElementById('output').textContent = latex || '⚠️ malformed RPN';
 
-      // Live LaTeX preview
+      // Live preview
       const img = document.getElementById('latex-preview');
-      if(latex) {
+      if (latex) {
         img.src = 'https://latex.codecogs.com/png.latex?' + encodeURIComponent(latex);
         img.alt = 'LaTeX preview';
       } else {

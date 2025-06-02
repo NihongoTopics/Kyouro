@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Kyouro Semantics Calculator</title>
+</head>
+<body>
+    <h1>Kyouro Semantics Calculator</h1>
+    <input type="text" id="userInput" placeholder="Enter your expression" size="60" style="font-size:24px">
+    <button onclick="parseAndShowLatex(); parseAndShowTree(); parseAndShowRoot();" size="60" style="font-size:24px">Calculate</button>
+    <h2>Base Structure</h2>
+    <div id="output"></div>
+    <h2>Derivative Tree</h2>
+    <div id="tree"></div>
+    <h2>Result</h2>
+    <div id="root"></div>
+    <div class="preview">
+        <strong>Preview:</strong><br>
+        <img id="latex-preview" src="" alt="LaTeX preview" />
+    </div>
+    <h2>How to use</h2>
+    <p>Enter a <a href="https://nihongotopics.github.io/Kyouro/Semantics of Tokyo Japanese.pdf">Kyouro semantics</a> expression (the base structure) in a simple math-like notation (see below). It will return the terminal nodes, the derivative tree, and the resulting nodes in the LaTeX format. Copy the output and paste it into your favorite LaTeX environemt.</p>
+    <p>Note:</p>
+    <ul>
+        <li>The parser relies on whitespaces between nodes. Seperate them with a whitespace and do not use a whitespace inside a node.</li>
+        <li>It does not support moods.</li>
+        <li>It does not support nests.</li>
+        <li>It does not support $.</li>
+        <li>It does not support index.</li>
+        <li>Roles are obligatory. If no appropriate roles are available, use _arg for arguments and _pred for predicates.</li>
+        <li>Previwe relise on https://latex.codecogs.com. "Invalid" does not necessarily mean your input or the result is broken.</li>
+        <li>The input is automatically saved as a url parameter. This allows you to share your calculation by simply copying the url. Remove parameters if necessary. (Emptying the input field and clicking Calculate will remove the parameters.)</li>
+    </ul>
+    <p>Notations:</p>
+    <ul>
+        <li> Use * for the dot operator</li>
+        <li> Use / for the vinculum</li>
+        <li> Use ! for the negator</li>
+        <li> Use ' (apostroph) for the prime</li>
+        <li> Use 1 for alpha (the dummy)</li>
+        <li> Use _ for roles</li>
+    </ul>
+    <p>Examples:</p>
+    <ul>
+        <li> <a href="?input=Mugi%2520_it%2520X%253AX%252FX%27%2520cute%2520_is%2520X%253AX%252F%21X">Mugi wa kawaii. ("Specifically Mugi is cute")</a></li>
+        <li> <a href="?input=Mugi%2520_it%2520X%253AX%27%252CX%27%27%252FX%2520cute%2520_is%2520X%253A%21X%252FX">Mugi shika kawaiku nai. ("Only Mugi is cute")</a> </li>
+        <li> <a href="?input=Tokyo%2520_in%2520X%253AX%252FX%27%2520John%2520_it%2520X%253AX%252FX%27%252CX%27%27%2520present%2520_is%2520X%253AX%252F%21X%2520X%253AX%252F%21X">Tōkyōni wa Jon ga iru. ("In Tokyo exactly John is present.")</a></li>
+    </ul>
+
+    <p>Other tools:</p>
+    <ul>
+        <li> <a href="RPN-LaTeX.html">RPN to LaTeX Linguistics Tree Generator</a> - allows you to generate linguistics style binary trees in LaTeX format.</li>
+    </ul>
+
+    <script src="semantic calc.js"></script>
+    <script>
+        // Load input from URL search params on page load
+        window.onload = function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const input = urlParams.get('input');
+            if (input) {
+                document.getElementById("userInput").value = decodeURIComponent(input);
+                parseAndShowLatex();
+                parseAndShowTree();
+                parseAndShowRoot();
+            }
+        };
+
+        function parseAndShowLatex() {
+            const input = document.getElementById("userInput").value;
+            let resultLatex = [];
+            try {
+                const parsed = parser(input);
+                resultLatex = parsed.map(obj => obj.latex());
+                // Save input to URL search params
+                const newUrl = new URL(window.location);
+                newUrl.searchParams.set('input', encodeURIComponent(input));
+                window.history.pushState({}, '', newUrl);
+            } catch (e) {
+                resultLatex = ["Error: " + e.message];
+            }
+            document.getElementById("output").innerHTML = resultLatex.join("    ");
+        }
+
+        function parseAndShowTree() {
+            const input = document.getElementById("userInput").value;
+            document.getElementById("tree").innerHTML = toTree(parser(input));
+        }
+
+        function parseAndShowRoot() {
+            const input = document.getElementById("userInput").value;
+            const parsed = parser(input);
+            document.getElementById("root").innerHTML = toRoot(parsed);
+
+            const img = document.getElementById('latex-preview');
+                img.src = 'https://latex.codecogs.com/png.latex?' + encodeURIComponent(toRoot(parsed));
+                img.alt = 'LaTeX preview';
+        }
+
+    </script>
+</body>
+</html>

@@ -160,7 +160,7 @@ class Tree{
 			}else if(this.right.key == 'affirmative'){
 				this.result = new PredParallel(new Side('', new Bundle(new Segment(this.left, ''))), new Side('!', new Bundle(new Segment(this.left, ''))));
 			}else if(this.right.key == 'dakeo'){
-				this.result = new ArgParallel(new Side('!', new Bundle(new Segment(this.left, "'"), new Segment(this.left, "''"))), new Side('', new Bundle(new Segment(this.left, ''))));
+				this.result = new ArgParallel(new Side('!', new Bundle(new Segment(this.left, "'"), new Segment(this.left, "''"))), new Side('!', new Bundle(new Segment(this.left, ''))));
 			}
 		} // parallel + parallel = Cserial
 		else if(this.left instanceof ArgParallel && this.right instanceof PredParallel){
@@ -231,7 +231,7 @@ window.parser = function parser(input) {
 							["X:X',X''/X", new Parallelizer('X', new Side('', new Bundle(new Segment(new Serial(new Role(''), new Meme('X')), "'"), new Segment(new Serial(new Role(''), new Meme('X')), "''"))), new Side('', new Bundle(new Segment(new Serial(new Role(''), new Meme('X')), ''))), 'shika')],
 							["X:!X/X", new Parallelizer('X', new Side('!', new Bundle(new Segment(new Serial(new Role(''), new Meme('X')), ''))), new Side('', new Bundle(new Segment(new Serial(new Role(''), new Meme('X')), ''))), 'negative')],
 							["X:X/!X", new Parallelizer('X', new Side('', new Bundle(new Segment(new Serial(new Role(''), new Meme('X')), ''))), new Side('!', new Bundle(new Segment(new Serial(new Role(''), new Meme('X')), ''))), 'affirmative')],
-							["X:!(X',X'')/X", new Parallelizer('X', new Side('!', new Bundle(new Segment(new Serial(new Role(''), new Meme('X')), "'"), new Segment(new Serial(new Role(''), new Meme('X')), "''"))), new Side('', new Bundle(new Segment(new Serial(new Role(''), new Meme('X')), ''))), 'dakeo')]]
+							["X:!(X',X'')/!X", new Parallelizer('X', new Side('!', new Bundle(new Segment(new Serial(new Role(''), new Meme('X')), "'"), new Segment(new Serial(new Role(''), new Meme('X')), "''"))), new Side('!', new Bundle(new Segment(new Serial(new Role(''), new Meme('X')), ''))), 'dakeo')]]
 							.sort((a, b) => b[0].length - a[0].length);
     const argRoles = ["_arg", "_by", "_to", "_for", "_with", "_in", "_on", "_at", "_from", "_about", "_as", 
                 "_like", "_over", "_under", "_through", "_between", "_it"].sort((a, b) => b.length - a.length);

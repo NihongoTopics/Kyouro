@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>LaTeX Preview</title>
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+
+  <main class="container">
+    <textarea type="text" placeholder="Type /help for help" id="textbox" class="content" style="text-align: center;"></textarea>
+    <div class="content" id="print" onclick="printElementById('print');">
+      <p id="result">\[ \frac{_\text{it}\text{Mugi}\prime, _\text{it}\text{Mugi}\prime\prime \cdot \neg _\text{is}\text{cute}}{_\text{it}\text{Mugi} \cdot _\text{is}\text{cute}} \]
+      <div id="help" hidden>
+        <p>This is a LaTeX preview generator. The text in the text field is rendered as LaTeX here (thanks to MathJax). The code you've entered is saved in the URL. Share your LaTeX code by sharing the URL. For example, X\colon\frac{X}{0} is rendered as: \[ X\colon\frac{X}{0} \]
+        <p>Clicking on the result area will take you to the print menu of your web browser, which allows you to print only the LaTeX result. This may be useful if you want the image as a PDF.
+      </div>
+    </div>
+  </main>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script>
+    function printElementById(elementId) {
+      var content = document.getElementById(elementId).innerHTML;
+      var win = window.open('', '', '');
+      win.document.write(content);
+      win.document.close();
+      win.focus();
+      win.print();
+      win.close();
+    }
+    function getInputFromUrl() {
+      const params = new URLSearchParams(window.location.search);
+      return params.get('input') || '';
+    }
+    function updateUrl(text) {
+      const params = new URLSearchParams(window.location.search);
+      if (text) params.set('input', text);
+      else params.delete('input');
+      const newUrl = window.location.pathname + '?' + params.toString();
+      window.history.replaceState(null, '', newUrl);
+    }
+    function toggleHelp(show){
+        document.getElementById("result").hidden = (show == "show");
+        document.getElementById("help").hidden = !(show == "show");
+        MathJax.typeset();
+    }
+    document.getElementById("textbox").textContent = getInputFromUrl();         
+    document.getElementById("result").textContent = "\\[" + getInputFromUrl() + "\\]";
+    if(document.getElementById("textbox").textContent == "/help"){
+      toggleHelp("show");
+    }
+    document.getElementById("textbox").addEventListener("input", function() {
+      if (this.value === "/help") {
+        toggleHelp("show");
+      } else {
+        document.getElementById("result").hidden = false;
+        document.getElementById("help").hidden = true;
+        document.getElementById("result").textContent = "\\[" + this.value + "\\]";
+        MathJax.typeset();
+        updateUrl(this.value);
+      }
+    });
+  </script>
+</body>
+</html>

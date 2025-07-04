@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Kyouro Lexical Register</title>
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+
+  <main class="container">
+    <input type="text" placeholder="Phonology. Type /help for help." id="phonology" class="content" style="text-align: center;"></input>
+    <input type="text" placeholder="Syntax." id = "syntax" class = "content" style = "text-align: center;"></input>
+    <input type = "text" placeholder = "Semantics." id = "semantics" class = "content" style = "text-align: center;"></input>
+    <textarea type = "text" placeholder = "The result appears here. Type /help anywhere for help." id = "latex" class = "content" style = "height: 200px;"></textarea>
+    <div class="content" id="print" onclick="printElementById('print');">
+      <p id="result">
+      <div id="help" hidden>
+      </div>
+    </div>
+  </main>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script>
+    function printElementById(elementId) {
+      var win = window.open('', '', '');
+      win.document.write(document.getElementById(elementId).innerHTML);
+      win.document.close();
+      win.focus();
+      win.print();
+      win.close();
+    }
+    function getInputFromUrl() {
+      const params = new URLSearchParams(window.location.search);
+      return params.get('input') || '';
+    }
+    function updateUrl(text) {
+      const params = new URLSearchParams(window.location.search);
+      if (text) params.set('input', text);
+      else params.delete('input');
+      const newUrl = window.location.pathname + '?' + params.toString();
+      window.history.replaceState(null, '', newUrl);
+    }
+    function toggleHelp(show){
+        document.getElementById("result").hidden = (show == "show");
+        document.getElementById("help").hidden = !(show == "show");
+        MathJax.typeset();
+    }
+    function 
+    document.getElementById("latex").textContent = getInputFromUrl();         
+    document.getElementById("latex").textContent = getInputFromUrl();
+    document.getElementById("result").textContent = "\\[" + document.getElementById("latex").textContent + "\\]" 
+    if(document.getElementById("phonology").textContent == "/help"){
+      toggleHelp("show");
+    }
+    document.getElementById("phonology").addEventListener("input", function() {
+      if (this.value === "/help") {
+        toggleHelp("show");
+      } else {
+        toggleHelp("hide");
+        document.getElementById("result").textContent = "\\[" + this.value + "\\]";
+        MathJax.typeset();
+        updateUrl(this.value);
+      }
+    });
+  </script>
+</body>
+</html>

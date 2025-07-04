@@ -1,14 +1,14 @@
 javascript:(function() {
     const conversionMap = {
-    "f": "ˈ",
-	"v": "ˌ",
-	"`": "ˋ",
-	"~": "ˎ",
-	";": "·", 
-	"q": "ȧ", 
-	"c": "ė",
-	"l": "ȯ",
-	"j": "ı"
+      "f": "ˈ",
+    	"v": "ˌ",
+  	  "`": "ˋ",
+    	"~": "ˎ",
+  	  ";": "·", 
+    	"q": "ȧ", 
+    	"c": "ė",
+    	"l": "ȯ",
+    	"j": "ı"
     };
 
     const inputElements = document.querySelectorAll('input, textarea');

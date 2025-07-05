@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Squibs: A Markdown/LaTeX text editor for tiny academic writing</title>
+    <link rel="stylesheet" href="../style.css">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+      .textarea-wrapper { position: relative; }
+      .textarea-wrapper .counter {
+        position: absolute;
+        bottom: 4px;
+        right: 8px;
+        font-size: 0.875rem;
+        pointer-events: none;
+}
+    </style>
+  </head>
+  <body>
+    <main class="container">
+      <div class = "textarea-wrapper">
+        <textarea placeholder="Write your squib here" id="body" class="content"></textarea>
+        <span class = "counter" id = "counter">0</span>
+      </div>
+      <div id="out" class="content">
+        <h2>Squibs: A Markdown/LaTeX text editor for tiny academic writing</h2>
+        <h3>Introduction</h3>
+        <p>
+          Squibs allows you to write a short squib with Markdown and LaTeX and share it on a social media. 
+          It is serverless; it saves all data in the URL. (If you lose the URL, you cannot recover your writing.)
+          It uses marked.js for Markdown and MathJax for LaTeX. Use \\\\(...\\\\) for inline math and \\\\[...\\\\] for display math.
+          It generates a hash-based ID ("Squib ID") for your writing. 
+        </p>
+        <p>
+          Squibs may be useful when you want to:
+        </p>
+        <ul>
+          <li>Share a quick note with mathematical expressions on X.com and other websites.</li>
+          <li>Jot down fugitive dieas and save it in the browser bookmarks.</li>
+          <li>Write a tiny paper and instantly publish it.</li>
+          <li>Prove you were the first to say it without disclosing the idea while your work is in print or preparation.</li>
+          <li>Save money by not subscribing to Premium.</li>
+        </ul>
+        <h3>How to use</h3>
+        <p>
+          Write your Markdown note in the text area above (caution: this note will disappear). 
+          It will be rendered in this area. 
+        </p>
+        <p>
+          As Squibs saves all your writing as the URL parameters, a long writing may create a URL too long to handle. 
+          To make sure your squib can be shared without facing technical limitations (older browers, server-side handling, etc), 
+          it is advised to keep the body text under about 1900 characters. 
+        </p>
+        <p>
+          Be sure to know that your data is only saved in the URL. If you lose the URL, you'll lose your work. 
+          Post it, bookmark it, email it, or copypaste it. 
+        </p>
+        <h3>Conclusion</h3>
+        <p>
+          Today, everything is short. Our attention span is not an exception. 
+          Some of us may feel reading a paper or a book increasingly challenging. 
+          Twitter made blogs short. TikTok made videos short. 
+          With Squibs, academic writing can become short as well. 
+        </p>
+        <p>
+          I hope Squibs promotes exchanging new ideas by offering a simple way to 
+          post an extremely short yet notationally rich piece of writing. 
+        </p>
+      </div>
+      <input class="content" type="text" placeholder="Author" id="author">
+      <input class="content" type="text" placeholder="Year" id="year">
+      <div id="info" class="content">
+        <h4>Squib ID:</h4>
+        <span id="hash">ttt</span>
+        <h4>What is a Squib ID?</h4>
+        <p>
+          A SHA-256 hash string is generated from the author name, the year, and the body text. 
+          The first twelve letters are used as the Squib ID. As it is derived from a hash string, 
+          a Squib ID is an unpredictable, near unique identifier.
+          If you change just one letter of your writing, the ID changes, 
+          and you cannot predict what ID you're getting before you change the text.
+        </p>
+        <p>
+          Posting your Squib ID on social media proves you had the squib at the time of posting, without necessarily posting the squib itself. 
+          You may want to consider noting your relevant social medial accounts in the body text before sharing it.
+        </p>
+        <p>
+          If someone cites a squib with its Squib ID in their paper and you refer to a squib of the same title, author, and year, 
+          comparing the Squib ID can verify whether the version you're looking at is the same version as the one cited. 
+          Make sure to include the Suib Id when citing a squib. 
+        </p>
+      </div>
+    </main>
+    <script>
+    function getParamFromUrl(target) {
+      const params = new URLSearchParams(window.location.search);
+      return params.get(target) || '';
+    }
+    function updateUrl(target, text) {
+      const params = new URLSearchParams(window.location.search);
+      if (text) params.set(target, text);
+      else params.delete(target);
+
+      const keysInOrder = ['author','year','body'];
+      const orderedPairs = [];
+      for (const key of keysInOrder) {
+        if (params.has(key)) {
+          orderedPairs.push(
+            key + '=' + encodeURIComponent(params.get(key))
+          );
+        }
+      }
+
+      const newQuery = orderedPairs.join('&');
+      const newUrl   = window.location.pathname + (newQuery ? '?' + newQuery : '');
+      window.history.replaceState(null, '', newUrl);
+    }
+
+  async function hashText(text) {
+    const encoder = new TextEncoder();
+    const data = encoder.encode(text);
+    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    return hashHex;
+  }
+
+  const body = document.getElementById('body');
+  const author = document.getElementById('author');
+  const year = document.getElementById('year');
+  const output = document.getElementById('out');
+  const hashDiv = document.getElementById('hash');
+
+  const counter = document.getElementById('counter');
+
+  body.value = getParamFromUrl('body');
+  author.value = getParamFromUrl('author');
+  year.value = getParamFromUrl('year');
+
+  async function render() {
+    if(body.value){
+      output.innerHTML = marked.parse(body.value);
+    }
+    if (window.MathJax && MathJax.typeset) MathJax.typeset([output]);
+    const hash = await hashText(author.value + year.value + body.value);
+    hashDiv.textContent = hash.slice(0, 4) + '-' + hash.slice(4, 8) + '-' + hash.slice(8, 12);
+  }
+
+  body.addEventListener('input', () => {
+    updateUrl('body', body.value);
+    counter.textContent = body.value.length;
+    render();
+  });
+
+  author.addEventListener('input', () => {
+    updateUrl('author', author.value);
+    render();
+  });
+
+  year.addEventListener('input', () => {
+    updateUrl('year', year.value);
+    render();
+  });
+
+  render();
+  counter.textContent = body.value.length;
+</script>
+  </body>
+</html>

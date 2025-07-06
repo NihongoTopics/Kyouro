@@ -6,6 +6,15 @@
     <title>Squibs: A Markdown/LaTeX text editor for tiny academic writing</title>
     <link rel="stylesheet" href="../style.css">
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        displayMath: [['$$','$$'], ['\\[','\\]']]
+      }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <style>
       body {
@@ -33,14 +42,14 @@
         <p>
           Squibs allows you to write a short squib with Markdown and LaTeX and share it on social media.
           It is serverless; it saves all data in the URL. (If you lose the URL, you cannot recover your writing.)
-          It uses marked.js for Markdown and MathJax for LaTeX. Use \\\\(...\\\\) for inline math and \\\\[...\\\\] for display math.
+          It uses marked.js for Markdown and MathJax for LaTeX. Use \$...\$ for inline math and \$\$...\$\$ for display math.
           It generates a hash-based ID ("Squib ID") for your writing.
         </p>
         <p>
           Squibs may be useful when you want to:
         </p>
         <ul>
-          <li>Share a quick note with mathematical expressions on Bluesky and other websites.</li>
+          <li>Share a quick note with mathematical expressions on X.com and other websites.</li>
           <li>Jot down fugitive ideas and save it in the browser bookmarks.</li>
           <li>Write a tiny paper and instantly publish it.</li>
           <li>Prove you were the first to say it without disclosing the idea while your work is in print or preparation.</li>
@@ -155,7 +164,10 @@
         if (body.value) {
           output.innerHTML = marked.parse(body.value);
         }
-        if (window.MathJax && MathJax.typeset) MathJax.typeset([output]);
+        if (window.MathJax && MathJax.typeset) {
+          output.innerHTML = output.innerHTML;
+          MathJax.typeset([output]);
+        }
         const hash = await hashText(author.value + year.value + body.value);
         hashDiv.textContent = hash.slice(0, 4) + '-' + hash.slice(4, 8) + '-' + hash.slice(8, 12);
       }

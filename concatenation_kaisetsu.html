@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Concatenation・$-理論・音韻統語論 ― Kyouro を知る人のための解説</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,400&family=Shippori+Mincho:wght@400;500;700&family=Newsreader:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+
+<script>
+window.MathJax = {
+  tex: {
+    inlineMath: [['\\(', '\\)']],
+    displayMath: [['\\[', '\\]']],
+    processEscapes: true
+  },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] },
+  chtml: { scale: 1.0 }
+};
+</script>
+<script id="MathJax-script" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.min.js"></script>
+
+<style>
+:root{
+  --paper:#f6f1e7;
+  --paper2:#efe7d6;
+  --ink:#241f18;
+  --ink-soft:#4a4136;
+  --rule:#d8cdb6;
+  --accent:#9a3b1f;      /* 弁柄(べんがら)色 */
+  --accent-soft:#c66a45;
+  --teal:#2e5d56;
+  --gold:#a07b1f;
+  --box:#fbf8f1;
+  --maxw:760px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  background:
+    radial-gradient(circle at 18% -8%, #fffdf7 0%, transparent 42%),
+    radial-gradient(circle at 100% 0%, #f0e6cf 0%, transparent 38%),
+    var(--paper);
+  color:var(--ink);
+  font-family:"Shippori Mincho","Newsreader",Georgia,"Times New Roman",serif;
+  font-size:18px;
+  line-height:1.95;
+  letter-spacing:.01em;
+  -webkit-font-smoothing:antialiased;
+}
+.grain{
+  pointer-events:none;position:fixed;inset:0;z-index:0;opacity:.035;mix-blend-mode:multiply;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+}
+.wrap{position:relative;z-index:1;max-width:var(--maxw);margin:0 auto;padding:0 26px 120px}
+
+/* ---- ヘッダー ---- */
+header.cover{padding:78px 0 30px;border-bottom:2px solid var(--ink);margin-bottom:14px}
+.kicker{
+  font-family:"Fraunces",serif;font-style:italic;font-size:15px;color:var(--accent);
+  letter-spacing:.06em;margin-bottom:18px
+}
+h1{
+  font-family:"Fraunces",serif;font-weight:600;font-size:clamp(30px,6.4vw,50px);
+  line-height:1.12;margin:0 0 8px;letter-spacing:-.01em
+}
+h1 .dollar{color:var(--accent);font-style:italic}
+.subtitle{font-size:17px;color:var(--ink-soft);margin:14px 0 4px;line-height:1.7}
+.meta{font-family:"Fraunces",serif;font-style:italic;font-size:14px;color:var(--ink-soft);margin-top:20px}
+
+/* ---- 目次 ---- */
+nav.toc{
+  background:var(--box);border:1px solid var(--rule);border-radius:3px;
+  padding:20px 26px;margin:34px 0;font-size:15.5px;line-height:1.9
+}
+nav.toc b{font-family:"Fraunces",serif;display:block;margin-bottom:8px;letter-spacing:.04em;font-size:13px;text-transform:uppercase;color:var(--accent)}
+nav.toc ol{margin:0;padding-left:1.4em;color:var(--ink-soft)}
+nav.toc a{color:var(--ink);text-decoration:none;border-bottom:1px solid transparent}
+nav.toc a:hover{border-bottom:1px solid var(--accent)}
+
+/* ---- 見出し ---- */
+h2{
+  font-family:"Fraunces",serif;font-weight:600;font-size:27px;line-height:1.25;
+  margin:64px 0 6px;padding-top:10px;letter-spacing:-.005em
+}
+h2 .num{
+  display:inline-block;font-style:italic;color:var(--accent);margin-right:.5em
+}
+h2 + .lead{color:var(--ink-soft);font-size:16px;margin-top:0;margin-bottom:18px}
+h3{font-family:"Fraunces",serif;font-weight:600;font-size:20px;margin:38px 0 4px;color:var(--teal)}
+
+p{margin:16px 0}
+.section-rule{height:1px;background:var(--rule);border:0;margin:8px 0 0}
+
+/* ---- 強調・用語 ---- */
+.term{font-weight:700;color:var(--accent)}
+.en{font-family:"Newsreader",Georgia,serif;font-style:italic}
+.dollar{color:var(--accent);font-weight:700}
+em{font-style:italic}
+
+/* ---- 背景知識ボックス ---- */
+.bg{
+  background:linear-gradient(180deg,#fbf7ee,#f5edda);
+  border:1px solid var(--rule);border-left:4px solid var(--teal);
+  border-radius:3px;padding:18px 22px;margin:26px 0;font-size:16px;line-height:1.85
+}
+.bg .tag{
+  font-family:"Fraunces",serif;font-style:italic;font-size:13px;color:var(--teal);
+  letter-spacing:.05em;display:block;margin-bottom:6px
+}
+.bg h4{margin:14px 0 4px;font-family:"Shippori Mincho",serif;font-size:15.5px;color:var(--teal)}
+
+/* ---- 定義ボックス ---- */
+.def{
+  background:var(--box);border:1px solid var(--accent-soft);border-radius:3px;
+  padding:16px 22px;margin:24px 0;position:relative
+}
+.def .tag{
+  font-family:"Fraunces",serif;font-style:italic;font-size:13px;color:var(--accent);
+  letter-spacing:.05em;display:block;margin-bottom:4px
+}
+
+/* ---- 引用 ---- */
+blockquote{
+  margin:24px 0;padding:4px 0 4px 22px;border-left:3px solid var(--gold);
+  color:var(--ink-soft);font-size:16px;line-height:1.8
+}
+blockquote cite{display:block;margin-top:8px;font-style:normal;font-size:13.5px;color:var(--gold);font-family:"Fraunces",serif}
+
+/* ---- 数式表示 ---- */
+.math-card{
+  background:#fffdf8;border:1px solid var(--rule);border-radius:4px;
+  padding:6px 18px;margin:22px 0;overflow-x:auto
+}
+.math-card .cap{
+  font-size:13px;color:var(--ink-soft);font-family:"Fraunces",serif;font-style:italic;
+  margin:6px 2px 0;border-top:1px dotted var(--rule);padding-top:6px
+}
+mjx-container{font-size:104% !important}
+
+/* ---- 注 ---- */
+.note{font-size:14.5px;color:var(--ink-soft);border-top:1px dotted var(--rule);padding-top:6px;margin-top:30px}
+.note sup{color:var(--accent)}
+sup.fn{color:var(--accent);font-size:.72em;font-weight:700;cursor:default}
+
+footer{
+  margin-top:80px;border-top:2px solid var(--ink);padding-top:18px;
+  font-size:13.5px;color:var(--ink-soft);font-family:"Fraunces",serif;font-style:italic
+}
+.tldr{
+  background:#241f18;color:#f3ead6;border-radius:4px;padding:26px 26px;margin:40px 0;
+}
+.tldr .tag{font-family:"Fraunces",serif;font-style:italic;color:var(--accent-soft);letter-spacing:.06em;font-size:14px}
+.tldr p{margin:10px 0;font-size:16.5px;line-height:1.8}
+.tldr .term{color:var(--accent-soft)}
+a.up{color:var(--accent);text-decoration:none}
+::selection{background:#e9c98c}
+</style>
+</head>
+<body>
+<div class="grain"></div>
+<div class="wrap">
+
+<header class="cover">
+  <div class="kicker">Kyouro 内部資料の読みほどき</div>
+  <h1>Concatenation・<span class="dollar">$</span>-理論・<br>音韻統語論(Phonosyntax)</h1>
+  <p class="subtitle">「Concatenation, $-Theory, and Phonosyntax」(Version&nbsp;7.1.0, 2026年5月)を、<br>すでに Kyouro を知っている人向けにかみくだいた解説。（Claudeにより生成。文責: @awesomenewways (原文著者)）</p>
+  <p class="meta">— 前提となる既存理論(<span class="en">Proposing</span> / <span class="en">Semantics</span> / <span class="en">Version Seven</span>)は必要なところだけ補足してある。</p>
+</header>
+
+<nav class="toc">
+  <b>もくじ</b>
+  <ol>
+    <li><a href="#s0">この論文がやろうとしていること</a></li>
+    <li><a href="#s1">前提のおさらい(必要な部分だけ)</a></li>
+    <li><a href="#s2">中心主張 ― merge は音韻論の中にある</a></li>
+    <li><a href="#s3">表記のルール</a></li>
+    <li><a href="#s4">Concatenation(連結)</a></li>
+    <li><a href="#s5">$-propagation($-伝播)</a></li>
+    <li><a href="#s6">複数 AP を持つ語 ― $-slot と $-span</a></li>
+    <li><a href="#s7">なぜ音韻論なのか ― merge-sensitive な証拠</a></li>
+    <li><a href="#s8">用語の問題と early branching</a></li>
+    <li><a href="#s9">まとめ</a></li>
+  </ol>
+</nav>
+
+<!-- ============ 0 ============ -->
+<h2 id="s0"><span class="num">0.</span>この論文がやろうとしていること</h2>
+<hr class="section-rule">
+<p>ひとことで言うと、この論文の主張はこうなる。<strong><span class="en">Proposing</span> で「統語論(syntax)の merge」と呼んできた操作は、本当は音韻論の中の仕事だったのではないか。</strong></p>
+
+<p>そこで著者は、音韻論の中に <span class="term">音韻統語論(phonosyntax)</span> という下位部門を立てる。merge はそこで起きる。そして、その phonosyntax で実際に走る操作のうち二つを、形式的なルールとしてきちんと定義する。それが <span class="term">concatenation(連結)</span> と <span class="term">$-propagation($-伝播)</span> だ。</p>
+
+<p>concatenation は「二つの文字列をつなげる」だけの、ほぼすべての言語にある当たり前の操作。$-propagation のほうは、東京日本語の<strong>ストレス(R の出る位置)</strong>を担当する操作で、<span class="en">Proposing</span> の <span class="term">トリミング(trimming)</span>を置きかえるものになっている。</p>
+
+<p>動機は二段構えになっている。ひとつは「音韻過程の中に merge に敏感(<span class="en">merge-sensitive</span>)なものがある」という昔からの観察。もうひとつは <span class="en">Semantics</span> で示した「意味論はかなり自律していて、音韻論とは別の木構造を使っている」という主張。後者が効いてくるのがポイントなので、まずそこから前提を整理する。</p>
+
+<!-- ============ 1 ============ -->
+<h2 id="s1"><span class="num">1.</span>前提のおさらい(必要な部分だけ)</h2>
+<p class="lead">細かい定義まで覚えていなくても読めるように、論文が前提にしている既存理論を最小限まとめておく。すでに分かっているところは飛ばしてOK。</p>
+<hr class="section-rule">
+
+<h3>1-1. プロソディ階層と R / Lv / F、ストレスの定義</h3>
+<p>Kyouro のプロソディは下から<strong>モーラ &lt; 音節 &lt; AP &lt; IP &lt; 文</strong>という厳密な層をなす(<span class="en">Proposing</span>)。各モーラは三つの<strong>輪郭声調(contour tone)</strong>のどれかを持つ ―― 上昇の <strong>R</strong>、平板の <strong>Lv</strong>、下降の <strong>F</strong>。R と Lv はまとめて <strong>nF(非下降)</strong>と呼ぶ。AP は「nF が一つ以上 → F が零個以上」という形(\(\text{nF}^{1}\text{F}^{0}\))をとる。</p>
+
+<div class="bg">
+  <span class="tag">背景 ― Proposing / Version Seven</span>
+  <h4>「ストレス」とは何か</h4>
+  <p>Kyouro では、いわゆるアクセントを輪郭声調で定義する。<span class="en">Version Seven</span> の定義はこう:<strong>「ある音節がその AP の末尾の R を担うとき、その音節はストレスを受ける」</strong>。プロソディ側から見ると、<strong>AP は、それが IP の最初の AP であるとき(=その AP の左端が IP 境界と一致するとき)にストレスを受ける</strong>。つまり「どの AP が R で始まるか」を決めることが、ストレスを決めることに等しい。</p>
+</div>
+
+<h3>1-2. $-理論 ― triangle constraint の言いかえ</h3>
+<p>「どの AP が R で始まるか」を統一的に説明するのが <span class="dollar">$</span>-理論(<span class="en">Proposing</span>)。これは <span class="en">triangle constraint</span> を、抽象的な素性 <span class="dollar">$</span> を使って言いかえたものだ。</p>
+
+<div class="def">
+  <span class="tag">$-理論(本論文での要約)</span>
+  <p>AP に与えられうる素性 <span class="dollar">$</span> が存在し、<strong><span class="dollar">$</span> を含む構成素(constituent)の最も左の AP がストレスを受ける</strong>。<br>
+  <span style="font-size:14.5px;color:var(--ink-soft)">(元の表現:「文の音韻木において、ある句が先頭に R を持つ ⇔ その句が <span class="dollar">$</span> を含む」。<span class="dollar">$</span> は一つの AP に高々一個。文には少なくとも一個の <span class="dollar">$</span> が要る。)</span></p>
+</div>
+
+<p>ここが大事:<span class="dollar">$</span>-理論は<strong>木構造(構成素)に依存したルール</strong>だ。つまり Kyouro は、意味論の形式的枠組みを持つ前から、すでに二分岐の木を前提にした文法を持っていた、ということになる。</p>
+
+<h3>1-3. syntax の merge とラベル(combinatory)</h3>
+<p><span class="en">Proposing</span> の文生成は、<strong>統語ノードの連続的な merge</strong> として描かれる。最初に音韻的性質とラベルを持ったノードの列が与えられ、隣りあうノードが merge できるかどうかはラベルで決まる。merge すると新しいノードが一個でき、入力ノードはもう使えなくなる。全部が一個になったら生成完了 ―― だから木は「生成手順の記録」だと考える。</p>
+<p>本論文では、この「どの順で・どのノード同士が merge できるか」を司る性質を、これから <span class="term">combinatory</span> と呼びなおす(「syntax」という語は別の中心部門に取っておきたいため)。</p>
+
+<h3>1-4. トリミング ― syntax → phonology の写像</h3>
+<div class="bg">
+  <span class="tag">背景 ― Proposing</span>
+  <h4>トリミングって何だったか</h4>
+  <p><strong>トリミング</strong>は、統語木を音韻木に変換する操作。<span class="en">ni, no, sa, o</span> のような「AP の先頭になれない(non-AP-initial)」要素を、直前の AP 先頭要素にくっつけて、余計な枝を刈り込んでいく。たとえば <span class="en">TOSHOKAN\\ ni\</span> → <span class="en">TOSHOKANni\\</span> のように。要は「統語の構成のしかた」と「音韻の句のまとまり方」がズレるので、その橋渡しをしていた。本論文は、このトリミングを <span class="dollar">$</span>-propagation の副産物として消す。</p>
+</div>
+
+<h3>1-5. Semantics の二層ベースモデル(これが効いてくる)</h3>
+<p>本論文の出発点は <span class="en">Semantics</span> の主張だ。そこでは、<strong>意味論は統語論とは別のベース構造を持ち、語彙項目(lexical item)が両者を橋渡しする</strong>とされた。</p>
+
+<blockquote>
+語彙項目は統語の基本単位であり、音(音韻 → 音声)と意味(意味論)のインターフェイスである。語彙項目はベース構造に挿入される。…… 語彙項目は階層構造を気にしない。構成素ではなく、<strong>妨げのない部分的な線形列(unimpeded partial linear sequence)</strong>を標的にする。
+<cite>― Semantics(本論文 §1 での引用)</cite>
+</blockquote>
+
+<p>つまり一個の語彙項目は、<strong>意味ノードの線形列</strong>を音韻・統語の性質に写すだけで、意味論側の階層は見ない。結果として、<strong>二つの別々の線形構造から、統語の木と意味論の木という二本の別々の木が立つ</strong>。そしてこの二本は、しばしば形が違う。</p>
+
+<div class="bg">
+  <span class="tag">背景 ― 助詞(particle)のズレの例</span>
+  <h4>o と「ni wa」が見せる食い違い</h4>
+  <p><span class="en">Proposing</span> では、<span class="en">yama o kowashita</span>(山を壊した)の <span class="en">o</span> は一つの構成素として扱われる。ところが <span class="en">Semantics</span> で見ると、<span class="en">o</span> は「左に置かれる<strong>役割(role)</strong>」と「右に置かれる<strong>並列子(parallelizer)</strong>」に分かれていて、その役割の部分は<strong>意味論では左隣(yama)へ merge してしまう</strong>。だから <span class="en">o</span> は統語では構成素でも、意味論では構成素ではない。</p>
+  <p>同じ構造を持つのが <span class="en">ni wa</span>(役割 + 並列子)で、こちらは <span class="en">ni</span> が統語でも意味論でも左へ merge する。<span class="en">o</span> と <span class="en">ni wa</span> が似た位置に立つのに片方だけ左へ寄る、というこのズレが、「純粋に音韻的ではない表示では、<span class="en">o</span> の一部も左へ merge しうる」ことを示唆する。要するに <strong>音韻が示す木と意味論が示す木は別物</strong>、という具体例。</p>
+</div>
+
+<p>ここから論文の発想はこうつながる ―― <strong>意味論が統語と同じ木を共有しないなら、では「統語」と呼んできたものは、思っていたよりずっと音韻寄りなのでは?</strong></p>
+
+<!-- ============ 2 ============ -->
+<h2 id="s2"><span class="num">2.</span>中心主張 ― merge は音韻論の中にある</h2>
+<hr class="section-rule">
+<p>そこで著者は、音韻部門を二つに分ける。</p>
+<p><span class="term">音韻統語論(phonosyntax)</span>は、<strong>音韻オブジェクトの連続的な merge と、それに伴う merge-sensitive な音韻操作によって、プロソディの入力を組み立てる</strong>過程。merge はここで起きる。これに対して <span class="term">プロソディ部門(prosody)</span>は <strong>merge に鈍感(merge-insensitive)</strong>で、プロソディ構造そのものを作る。分節音を音節テンプレに合わせる類の操作はこちら側。プロソディの出力が音声(phonetics)へ渡る。</p>
+
+<div class="def">
+  <span class="tag">流れの全体像</span>
+  <p>ベース構造(phonosyntax のノードと意味論のノードの<strong>平行した線形構造</strong>)<br>
+  → <strong>phonosyntax</strong>:merge を繰り返して文字列を組み立てる(concatenation・$-propagation など)<br>
+  → <strong>prosody</strong>:プロソディ構造を組む(merge には触れない)<br>
+  → <strong>phonetics</strong>。</p>
+</div>
+
+<p>merge は「二つのノードから新しいノードを一個作る関数」。phonosyntax では、merge は<strong>二つの文字列から新しい文字列を作る</strong>。concatenation と $-propagation は、その merge の中で順番に走る<strong>サブルーチン</strong>だ。サブルーチンは順に適用され、入力条件に合わないノードはそのまま素通りして次のサブルーチンに回される。</p>
+
+<!-- ============ 3 ============ -->
+<h2 id="s3"><span class="num">3.</span>表記のルール</h2>
+<hr class="section-rule">
+<p><span class="en">Semantics</span> の<strong>無名関数の表記</strong>を流用する。コロンの左が入力、右が出力。関数 \(f(x)=y\) を \(x : y\) と書く。順序対はコンマで、\(a,b\) は対 \((a,b)\)。だから \(a,b : x,y\) は「対 \((a,b)\) を取って対 \((x,y)\) を返す関数」。</p>
+<p>表記自体が<strong>入力条件</strong>を表す。\(a,b : x,y\) は「入力が順序対のときだけ \(x,y\) を作る」ことを、\(X|Y : x\) は「入力が AP 境界を含む文字列のときだけ \(x\) を作る」ことを意味する。</p>
+
+<div class="def">
+  <span class="tag">記号</span>
+  <p>・<strong>AP 境界</strong>は縦棒 \(|\) で表す。<br>
+  ・\(X,\ Y,\ Z\) は<strong>零個以上の連続した記号列</strong>を表す予約文字。同じ文字が一つのルールに複数回出たら、すべて同じ列を指す。<br>
+  ・木は <span class="en">Proposing</span> と同じ書き方:親ノードを娘の上、左の娘より<strong>右にずらして</strong>置く。木の中では、結果ノードの位置に関数表記そのものを書く。</p>
+</div>
+
+<p>なお phonosyntax のノードは音韻的性質と combinatory 性質の両方を持つが、concatenation と $-propagation はどちらも combinatory 性質を必要としないので、ここでは入出力を「音韻文字列(または文字列の対)」だけと見なして簡略化する。</p>
+
+<!-- ============ 4 ============ -->
+<h2 id="s4"><span class="num">4.</span>Concatenation(連結)</h2>
+<hr class="section-rule">
+
+<div class="def">
+  <span class="tag">定義</span>
+  <p>\[ X,\ Y\ :\ XY \]
+  「二つの文字列の順序対を取り、<strong>順序を変えずにつなげた</strong>新しい一本の文字列を返す」。</p>
+</div>
+
+<p>連結は入力を一本にまとめるので、同じ merge の<strong>後ろ</strong>に来るサブルーチンは「一本の文字列を入力に取るもの」になりやすい。逆に連結の<strong>前</strong>に来るのは「二本取って二本返すもの」になりやすい(でないと一本をまた割るサブルーチンが要る)。</p>
+
+<p><span class="en">yama o mita</span>(山を見た)の派生はこうなる。下の終端から上へ読む:</p>
+
+<div class="math-card">
+  \[
+  \begin{array}{c}
+  |\text{yamao},\ |\text{mita}\ :\ |\text{yamao}|\text{mita}\\[6pt]
+  \begin{array}{cc}
+  |\text{yama},\ \text{o}\ :\ |\text{yamao} & \qquad |\text{mi},\ \text{ta}\ :\ |\text{mita}\\[4pt]
+  \begin{array}{cc}|\text{yama}\ & \ \text{o}\end{array} & \qquad \begin{array}{cc}|\text{mi}\ & \ \text{ta}\end{array}
+  \end{array}
+  \end{array}
+  \]
+  <div class="cap">終端は \(|\text{yama},\ \text{o},\ |\text{mi},\ \text{ta}\)。まず各ペアを連結して \(|\text{yamao}\) と \(|\text{mita}\) を作り、最後にもう一度連結して一本にする。</div>
+</div>
+
+<!-- ============ 5 ============ -->
+<h2 id="s5"><span class="num">5.</span>$-propagation($-伝播)</h2>
+<hr class="section-rule">
+<p>$-propagation は、<strong>入力文字列に与えられた <span class="dollar">$</span> を、その文字列の最初の AP にコピーする</strong>サブルーチン。<span class="dollar">$</span> を持つ AP は、AP 境界の<strong>直後</strong>に <span class="dollar">$</span> を置いて示す。プロソディは「\(|\$\)」という並びを<strong>ストレスを受ける AP の左端</strong>と解釈する。</p>
+
+<div class="def">
+  <span class="tag">定義(一本の文字列を取る版)</span>
+  <p>\[ |X\$Y\ :\ |\$X\$Y \]
+  「先頭に \(|\) を持ち、どこかに <span class="dollar">$</span> を持つ一本の文字列を取り、<strong>最初の \(|\) の直後に <span class="dollar">$</span> を挿入した</strong>文字列を返す」。</p>
+</div>
+
+<p>これは「<span class="dollar">$</span> を含む構成素の最も左の AP がストレスを受ける」という $-理論を、そのまま操作として実装したものになっている。論文は二本取る版 \(|X,\ Y\$Z : |\$X,\ Y\$Z\) も挙げているが、一本版が一番シンプルだと判断している。</p>
+
+<p>また、merge が重なると <span class="dollar">$</span> が何個も連なってしまうが、プロソディは <span class="dollar">$</span> の個数を区別しないので、<strong>連続する <span class="dollar">$</span> は一個と書く</strong>約束にする(「\(|\$\)」「\(|\$\$\)」「\(|\$\$\$\)」は全部「\(|\$\)」)。$-propagation は一本の文字列を取るので、<strong>連結の後に来る</strong>(連結が二本を一本にしてくれる)。</p>
+
+<h3>例1 ― \(\text{yama o }\$\text{mita}\)(最初は mita だけに $)</h3>
+<div class="math-card">
+  \[
+  \begin{array}{c}
+  |\text{yamao}|\$\text{mita}\ :\ |\$\text{yamao}|\$\text{mita}\\[6pt]
+  \begin{array}{cc}
+  |\text{yamao} & \qquad\quad |\$\text{mita}\\[4pt]
+  \begin{array}{cc}|\text{yama}\ &\ \text{o}\end{array} & \qquad \begin{array}{cc}|\$\text{mi}\ &\ \text{ta}\end{array}
+  \end{array}
+  \end{array}
+  \]
+  <div class="cap">連結で一本にしたあと、$-propagation が <span class="dollar">$</span> を先頭 AP(yama)へコピー。yama と mita の両方がストレスを受ける。</div>
+</div>
+
+<h3>例2 ― \(\$\text{yama o mita}\)(最初の AP だけに $)</h3>
+<div class="math-card">
+  \[
+  \begin{array}{c}
+  |\$\text{yamao}|\text{mita}\\[6pt]
+  \begin{array}{cc}
+  |\$\text{yamao} & \qquad\quad |\text{mita}\\[4pt]
+  \begin{array}{cc}|\$\text{yama}\ &\ \text{o}\end{array} & \qquad \begin{array}{cc}|\text{mi}\ &\ \text{ta}\end{array}
+  \end{array}
+  \end{array}
+  \]
+  <div class="cap">先頭 AP にしか <span class="dollar">$</span> がなければ、他の AP には <span class="dollar">$</span> が回らない。先頭だけストレス。</div>
+</div>
+
+<h3>$-理論の二つの予測を再現する</h3>
+<p>$-理論は、三つの AP \(|X\ |Y\ |Z\) について、<strong>右端の AP がストレスを受けるなら、左の AP もすべてストレスを受ける</strong>と予測する。一方、<strong>左へ merge する AP(たとえば \([|X\ [|Y\ |Z]]\) ではなく \([[|X\ |Y]\ |Z]\) の \(|Y\))は、右にストレスがあっても、ベースに <span class="dollar">$</span> がなければストレスを免れうる</strong>。</p>
+
+<h4 style="color:var(--teal);font-family:'Shippori Mincho',serif;font-size:16px;margin-top:24px">右枝型 ― 全部にストレス</h4>
+<p><span class="en">yumi ga dōnatsu o tabemashita</span>(まさにユミがまさにドーナツを食べた)。<span class="en">tabemashita</span> にストレスがあって <span class="en">dōnatsu o</span> が無ストレス、という発音は<strong>不適格</strong>。\(\$\) を <span class="en">tabemashita</span> に置くと、全 AP に伝播する:</p>
+<div class="math-card">
+  \[
+  \begin{array}{c}
+  |\text{yumiga}|\$\text{dōnatsuo}|\$\text{tabemashita}\ :\ |\$\text{yumiga}|\$\text{dōnatsuo}|\$\text{tabemashita}\\[6pt]
+  |\text{dōnatsuo}|\$\text{tabemashita}\ :\ |\$\text{dōnatsuo}|\$\text{tabemashita}\\[6pt]
+  \begin{array}{ccc}
+  |\text{yumiga} & |\text{dōnatsuo} & |\$\text{tabemashita}
+  \end{array}
+  \end{array}
+  \]
+  <div class="cap">右枝型 \([\text{yumiga}\ [\text{dōnatsuo}\ \text{tabemashita}]]\)。下の merge から <span class="dollar">$</span> が次々と先頭へコピーされ、最終的に全 AP に <span class="dollar">$</span> が付く。</div>
+</div>
+
+<h4 style="color:var(--teal);font-family:'Shippori Mincho',serif;font-size:16px;margin-top:24px">左枝型 ― 真ん中が逃げる</h4>
+<p><span class="en">oishī dōnatsu o tabemashita</span>(おいしいドーナツを食べた)。さっきと違い、<span class="en">tabemashita</span> にストレス・<span class="en">dōnatsu o</span> が無ストレス、で<strong>適格になりうる</strong>。\(\$\) を <span class="en">tabemashita</span> だけに置くと、真ん中の <span class="en">dōnatsu o</span> がストレスを免れる:</p>
+<div class="math-card">
+  \[
+  \begin{array}{c}
+  |\text{oishī}|\text{dōnatsuo}|\$\text{tabemashita}\ :\ |\$\text{oishī}|\text{dōnatsuo}|\$\text{tabemashita}\\[6pt]
+  |\text{oishī}|\text{dōnatsuo}\\[4pt]
+  \begin{array}{ccc}
+  |\text{oishī} & |\text{dōnatsuo} & |\$\text{tabemashita}
+  \end{array}
+  \end{array}
+  \]
+  <div class="cap">左枝型 \([[\text{oishī}\ \text{dōnatsuo}]\ \text{tabemashita}]\)。\(\text{oishī}+\text{dōnatsuo}\) が先に(<span class="dollar">$</span> なしで)まとまり、最後に \(\$\text{tabemashita}\) と連結。$-propagation は先頭 AP(oishī)にだけ <span class="dollar">$</span> をコピーするので、真ん中の dōnatsu o は <span class="dollar">$</span> をもらえない。</div>
+</div>
+
+<p>同じ三語でも、内部の merge のしかた(枝の向き)が違えばストレスの出方が変わる ―― これがちょうど $-理論の予測どおりで、$-propagation 一本でそれを再現できている。</p>
+
+<!-- ============ 6 ============ -->
+<h2 id="s6"><span class="num">6.</span>複数 AP を持つ語 ― $-slot と $-span</h2>
+<hr class="section-rule">
+<p><span class="en">Proposing</span> では、<strong>複数 AP からなる語</strong>のストレスは語彙指定が要る、とだけ言って棚上げしていた。その典型が <span class="en">nintokutennō</span>(仁徳天皇)と <span class="en">tōkyōdizunīshī</span>(東京ディズニーシー)の差だ。</p>
+
+<blockquote>
+複数 AP 語の最初の AP に R が来るとき、残りの AP に R が来るかは <span class="dollar">$</span> の位置から完全には予測できない。<span class="en">nintokutennō</span> が R を受けると最初の AP <span class="en">nintoku</span> だけに与えられるのに、<span class="en">tōkyōdizunīshī</span> では二つの AP それぞれに R が与えられる。この違いは語彙的に特徴づける必要があるようだ。
+<cite>― Proposing</cite>
+</blockquote>
+
+<div class="bg">
+  <span class="tag">背景 ― Version Seven の部分的な解</span>
+  <h4>$-slot と $-span</h4>
+  <p><span class="en">Version Seven</span> はこう手当てした。音韻的 <span class="dollar">$</span> は <strong>$-span ごとに、ある特定の AP</strong> に置かれる(その AP が複数 AP 語の一つでも同じ)。そして <span class="dollar">$</span> を受ける AP は、語彙で <strong>$-slot</strong> として指定される。
+  ・語は <strong>$-slot を高々一個</strong>持つ。
+  ・複数 AP 語の内部 AP は、文の音韻木に<strong>終端ノードとして</strong>属する。
+  ・<strong>$-span</strong>:音韻木の終端列は、ちょうど整数個の $-span に分かれる。各 AP はちょうど一つの $-span に属し、$-slot を持たない AP は、それが merge する「最も近い $-slot 持ち AP」と同じ $-span に入る。各 $-span は $-slot をちょうど一個持つ。</p>
+</div>
+
+<p>この枠組みを phonosyntax に落とすと、<strong>複数 AP 語は phonosyntax では「AP を高々一つずつ持つ複数の終端ノード」として扱われる</strong>。語と語の間の構造は、たとえば \([[X\ X']\ Y]\) だったり \([X\ [Y\ Y']]\) だったりする(\(X\,X'\) は語 \(x\)、\(Y\,Y'\) は語 \(y\) の AP)。</p>
+
+<p>なぜ AP 単位で phonosyntax を回すかというと、それが $-理論の要請だから。もし<strong>一つの AP が phonosyntax ノードの最大サイズ</strong>なら、(merge が一回でも起きるかぎり)どの AP 境界も、派生のどこかで必ず入力文字列の端として現れることが保証される ―― だから AP に敏感なサブルーチンが自然に立てられる。これによって、トリミングは「AP に敏感な merge-sensitive 音韻ルールの<strong>副産物(epiphenomenon)</strong>」として説明でき、独立のマッピング規則として立てる必要がなくなる。</p>
+
+<h3>仁徳天皇 vs 東京ディズニーシー、決着</h3>
+<p>語内部の merge 関係も語彙指定の一部だと考える。$-slot を曲折アクセント(\(\hat{\ }\))で示すと、語 \([X\ [Y\ |\hat Z]]\) で <span class="dollar">$</span>-slot の \(|\hat Z\) が <span class="dollar">$</span> を受けると、$-propagation により \(X\) と \(Y\) にも <span class="dollar">$</span> が回る。一方、語 \([[X\ Y]\ |\hat Z]\) なら(他の条件が同じでも)<span class="dollar">$</span> は \(|\hat Z\) と \(X\) にしか付かない(真ん中の \(Y\) は逃げる)。これは §5 の右枝型 / 左枝型の対比とまったく同じ理屈だ。</p>
+
+<div class="def">
+  <span class="tag">語彙指定</span>
+  <p>・<strong>仁徳天皇</strong>:\([\,|\hat{\text{nintoku}}\ \ |\text{tennō}\,]\) ―― $-slot は先頭 <span class="en">nintoku</span>。<span class="en">tennō</span> は $-slot の<strong>右側</strong>なのでストレスを免れ、<span class="en">nintoku</span> だけ。<br>
+  ・<strong>東京ディズニーシー</strong>:\([\,|\text{tōkyō}\ \ |\hat{\text{dizunīshī}}\,]\) ―― $-slot は <span class="en">dizunīshī</span>。先頭 <span class="en">tōkyō</span> に <span class="dollar">$</span> が伝播し、<strong>両方</strong>にストレス。</p>
+</div>
+
+<p>こうして「$-slot の右の AP はストレスを受けない」「左へ merge する AP は、そこにベースで <span class="dollar">$</span> が無ければストレスを受けない」という、$-span 内でストレスを免れる AP も、同じ仕組みで自動的に説明される。</p>
+
+<!-- ============ 7 ============ -->
+<h2 id="s7"><span class="num">7.</span>なぜ音韻論なのか ― merge-sensitive な証拠</h2>
+<hr class="section-rule">
+<p>phonosyntax を立てる根っこの動機は、<span class="en">Proposing</span> 第3章の一節に最もよく出ている。</p>
+<blockquote>
+ある種の音韻過程は局所的な統語構造に適用される。接尾辞が基体に再帰的に merge していくにつれ、アクセント・スイッチングが再帰的に起きる。R の位置を決めるにも局所構造へのアクセスが要る。これらは、統語が音韻に先行するのは各部分過程についてだけで、統語が全部終わってから音韻が始まる、というのではないことを示している。
+<cite>― Proposing 第3章</cite>
+</blockquote>
+
+<h3>証拠1 ― アクセント・スイッチング</h3>
+<p>代表例が <span class="en">warawaserareru</span>(笑わせられる=「笑わされるだろう」)のような動詞形。<span class="en">warau</span>(笑う)+ 使役 + 受動 + … と接尾辞が merge するたびに、<strong>同じアクセント移動の規則がそのつど(再帰的に)適用される</strong>。merge の各段階で局所構造を見ているので、これは典型的な merge-sensitive 操作だ。<span style="font-size:14.5px;color:var(--ink-soft)">(元論文は Kyouro 綴りで各段階のアクセント記号つき派生を示しているが、ここでは要点だけ ―― 「左から右へ merge しながら、各 merge でアクセントが付け替わっていく」。)</span></p>
+
+<h3>証拠2 ― 不透明な分節音操作(t / ch 交替)</h3>
+<p>日本語の動詞活用には <span class="en">t</span>(前部歯茎閉鎖音)と <span class="en">ch</span>(後部歯茎破擦音)の交替がある:</p>
+<div class="def">
+  <span class="tag">観察</span>
+  <p>・<span class="en">kateba</span>(= kat + reba)「勝てば」<br>
+  ・<span class="en">kachimasu</span>(= kat + imasu)「勝ちます」</p>
+</div>
+<p>「\(t\) は \(i\) の前で \(ch\) になる」と立てたくなるが、表面には <span class="en">ti</span> も出る(例:<span class="en">insentibu</span>「インセンティブ」)。「<span class="en">ti</span> は主に借用語だから」と語彙層(lexical strata)を持ち出すこともできるが、層指定そのものが追加の音韻情報で、しかも層から素性を埋める規則も別途要る。<strong>「\(t\)→\(ch\) の規則は merge-sensitive だ」とする方が単純</strong>だ。</p>
+<p>要するに、merge を phonosyntax の操作にしてしまえば、「なぜこの規則は特定の文法的文脈でしか効かないのか」を説明するために、語彙負担や追加装置を抱えこむ必要がなくなる ―― これが phonosyntax を立てる実利だ。</p>
+
+<div class="bg">
+  <span class="tag">余談 ― 語彙層についての脚注</span>
+  <p>論文は「下位指定(underspecification)を根拠に語彙層を立てる」やり方を一般に戒めている。たとえば六語だけの仮想言語 [pap, kak, dim, gor, dos, yap] で、形が揃う pap/kak を「native」、残りを「loan」と分ければ指定を減らせる。でもそれは <span class="en">kos</span> が非文だと予測したりはしない。情報の圧縮は語彙の<strong>数学的な状態</strong>だけで決まる話で、文法とは別物 ―― それは「データ圧縮の技法」であって言語の文法ではない、ということ。</p>
+</div>
+
+<!-- ============ 8 ============ -->
+<h2 id="s8"><span class="num">8.</span>用語の問題と early branching</h2>
+<hr class="section-rule">
+<p>「phonosyntax って、結局 syntax の一部を言いかえただけでは?」という反論は当然ありうる(merge や連結を音韻論と呼ぶのは慣例に反する。Scheer 2016)。論文の答えは「これは名前の付けかえではなく、<strong>アーキテクチャ上の実質的な主張</strong>だ」。</p>
+
+<p>骨子は単純で、しかも目新しくない:<strong>音韻論は木構造を必要とする</strong>。SPE は英語のストレス規則や一部の分節規則のために統語構造に頼ったし、その後の音韻論(Nespor & Vogel 2007 など)も、統語と同型であれ写像で得た別構造であれ、階層構造を前提にしてきた。T-model でも統語木は LF だけでなく PF にも仕える。本論文がしているのは、<strong>その「音韻に仕える階層構造」を、音韻論の内側に置く</strong>ことだけだ。</p>
+
+<div class="def">
+  <span class="tag">syntax と phonology の線引き</span>
+  <p>・ある構造とそれに働く規則が<strong>意味も音も</strong>変える(同じ木が意味論にも仕える)なら、それは第三の名前=<strong>syntax</strong> と呼ぶ理由がある。<br>
+  ・ある構造と規則が<strong>音だけ</strong>に仕えるなら、それは <strong>phonology</strong> でなければならない。<br>
+  本論文の phonosyntax 規則は意味オブジェクトを参照も変更もしないので、音韻論に置くのは当然の帰結。</p>
+</div>
+
+<p>ただしこの議論は「意味論は音韻論と同じ木を見ない」という早期分岐の主張に乗っかっている。「<span class="en">early branching</span>(意味論と音韻論が従来考えられていたより早く分かれる)」が、ただの言い張りではないか、という懸念は正当だ。論文はこう答える ―― ファイルを複製してから両方に同じ編集を加えるなら、編集後に複製したのと結果は変わらず、「早く分かれた」と言っても何の予測も生まない。<strong>同じ操作が PF と LF の両方で起きるなら、それは強引な分離(forced decoupling)</strong>だ。だが本枠組みでは意味論と音韻論が操作を共有していない(それは <span class="en">Semantics</span> の記述から明らか)ので、early branching は実質を持つ。</p>
+
+<div class="bg">
+  <span class="tag">直観 ― なぜ early branching が自然か</span>
+  <p>言語を記述するとき、私たちは「音のパズル」「意味のパズル」、そして両者を結ぶ「連結のパズル(=伝統的に syntax と lexicon)」に直面する。設計には<strong>疎結合(loose coupling)</strong>と<strong>密結合(tight coupling)</strong>の選択がある。密結合だと、音韻論と意味論が派生履歴を多く共有し、一方をいじると他方が壊れやすい。疎結合(=早く分岐)なら共有が少なく、各部門を独立に直しやすい。音韻論と意味論を両立させたいなら、early branching に寄せるのが自然だ ―― 他をいじったツケで既に書いたものを書き直す、を避けられるから。</p>
+</div>
+
+<!-- ============ 9 ============ -->
+<h2 id="s9"><span class="num">9.</span>まとめ</h2>
+<hr class="section-rule">
+<p>論文の結論はこうまとめられる。</p>
+<p>① <span class="en">Proposing</span> の「統語的 merge」は、音韻論の下位部門 <strong>phonosyntax</strong> の一部として理解しなおせる。根拠は、merge-sensitive な音韻事実(アクセント・スイッチング、t/ch 交替など)と、音韻論と同じ木に頼らない自律的な意味論(<span class="en">Semantics</span>)。</p>
+<p>② その phonosyntax の二つの下位過程を形式化した:<strong>concatenation</strong>(二本の文字列を一本にする、ほぼ全言語にある操作)と <strong>$-propagation</strong>(東京日本語のストレス配置を担い、<span class="en">Proposing</span> のトリミングを置きかえる)。</p>
+<p>③ 理論的含意は <strong>「より小さな syntax」</strong>。merge が音韻論のものなら、音韻論と意味論は従来思われていたより早く分かれ、音と意味のインターフェイス=中心部門としての syntax は、merge を抜いたぶん短くなる。</p>
+
+<div class="tldr">
+  <span class="tag">いちばん大事なところ</span>
+  <p>音韻論は昔から木(特に merge)を必要としてきた。一方、意味論はその同じ木を必要としない。<strong>なら、<span class="en">Proposing</span> で「統語的 merge」と呼んできたものは、音韻論だと考えるべき。</strong> もしそれが音韻論なら、<span class="term">syntax は小さくなる。</span></p>
+  <p>Kyouro プロジェクト的には、phonosyntax を部分的に形式化できたことと、トリミングを置きかえられたことが大きい。syntax–phonology のマッピング・パズルは消える ―― 最初から最後まで音韻論なのだから。</p>
+</div>
+
+<p>最後に著者は<strong>連結(concatenation)</strong>そのものへ一言を残す。連結は音韻操作として当たり前に扱われ、Kyouro でも今日まで暗黙のままだった。説明されずに済んできた一因は、「木は音韻文字列を割って得る → merge は分岐の逆」という直観だろう(一つを割って二つになるなら、くっつければ元に戻る、と)。だが<strong>音韻的な連結は人間言語の本質の重要な一部</strong>であり、真面目な言語理論なら、連結に明示的な地位を与え、モデル内での存在論的立場を論じるべきだ ―― という宿題で論文は閉じる。</p>
+
+<footer>
+  解説:「Concatenation, $-Theory, and Phonosyntax」(Kyouro 公式文書, Version 7.1.0, 2026年5月)より。<br>
+  前提の補足は Proposing(ver. 6.5.x)/ Semantics / Version Seven(ver. 7.0.7)を参照。Feel free to redistribute.
+</footer>
+
+</div>
+</body>
+</html>

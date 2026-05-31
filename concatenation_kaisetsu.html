@@ -177,7 +177,7 @@ a.up{color:var(--accent);text-decoration:none}
     <li><a href="#s3">表記のルール</a></li>
     <li><a href="#s4">Concatenation(連結)</a></li>
     <li><a href="#s5">$-propagation($-伝播)</a></li>
-    <li><a href="#s6">複数 AP を持つ語 ― $-slot と $-span</a></li>
+    <li><a href="#s6">複数 AP を持つトークン ― $-slot と $-span</a></li>
     <li><a href="#s7">なぜ音韻論なのか ― merge-sensitive な証拠</a></li>
     <li><a href="#s8">用語の問題と early branching</a></li>
     <li><a href="#s9">まとめ</a></li>
@@ -387,30 +387,30 @@ a.up{color:var(--accent);text-decoration:none}
 <p>同じ三語でも、内部の merge のしかた(枝の向き)が違えばストレスの出方が変わる ―― これがちょうど $-理論の予測どおりで、$-propagation 一本でそれを再現できている。</p>
 
 <!-- ============ 6 ============ -->
-<h2 id="s6"><span class="num">6.</span>複数 AP を持つ語 ― $-slot と $-span</h2>
+<h2 id="s6"><span class="num">6.</span>複数 AP を持つトークン ― $-slot と $-span</h2>
 <hr class="section-rule">
-<p><span class="en">Proposing</span> では、<strong>複数 AP からなる語</strong>のストレスは語彙指定が要る、とだけ言って棚上げしていた。その典型が <span class="en">nintokutennō</span>(仁徳天皇)と <span class="en">tōkyōdizunīshī</span>(東京ディズニーシー)の差だ。</p>
+<p><span class="en">Proposing</span> では、<strong>複数 AP からなるトークン</strong>のストレスは語彙指定が要る、とだけ言って棚上げしていた。その典型が <span class="en">nintokutennō</span>(仁徳天皇)と <span class="en">tōkyōdizunīshī</span>(東京ディズニーシー)の差だ。</p>
 
 <blockquote>
-複数 AP 語の最初の AP に R が来るとき、残りの AP に R が来るかは <span class="dollar">$</span> の位置から完全には予測できない。<span class="en">nintokutennō</span> が R を受けると最初の AP <span class="en">nintoku</span> だけに与えられるのに、<span class="en">tōkyōdizunīshī</span> では二つの AP それぞれに R が与えられる。この違いは語彙的に特徴づける必要があるようだ。
+複数 AP トークンの最初の AP に R が来るとき、残りの AP に R が来るかは <span class="dollar">$</span> の位置から完全には予測できない。<span class="en">nintokutennō</span> が R を受けると最初の AP <span class="en">nintoku</span> だけに与えられるのに、<span class="en">tōkyōdizunīshī</span> では二つの AP それぞれに R が与えられる。この違いは語彙的に特徴づける必要があるようだ。
 <cite>― Proposing</cite>
 </blockquote>
 
 <div class="bg">
   <span class="tag">背景 ― Version Seven の部分的な解</span>
   <h4>$-slot と $-span</h4>
-  <p><span class="en">Version Seven</span> はこう手当てした。音韻的 <span class="dollar">$</span> は <strong>$-span ごとに、ある特定の AP</strong> に置かれる(その AP が複数 AP 語の一つでも同じ)。そして <span class="dollar">$</span> を受ける AP は、語彙で <strong>$-slot</strong> として指定される。
-  ・語は <strong>$-slot を高々一個</strong>持つ。
-  ・複数 AP 語の内部 AP は、文の音韻木に<strong>終端ノードとして</strong>属する。
+  <p><span class="en">Version Seven</span> はこう手当てした。音韻的 <span class="dollar">$</span> は <strong>$-span ごとに、ある特定の AP</strong> に置かれる(その AP が複数 AP トークンの一つでも同じ)。そして <span class="dollar">$</span> を受ける AP は、語彙で <strong>$-slot</strong> として指定される。
+  ・語彙項目は <strong>$-slot を高々一個</strong>持つ。
+  ・複数 AP トークンの内部 AP は、文の音韻木に<strong>終端ノードとして</strong>属する。
   ・<strong>$-span</strong>:音韻木の終端列は、ちょうど整数個の $-span に分かれる。各 AP はちょうど一つの $-span に属し、$-slot を持たない AP は、それが merge する「最も近い $-slot 持ち AP」と同じ $-span に入る。各 $-span は $-slot をちょうど一個持つ。</p>
 </div>
 
-<p>この枠組みを phonosyntax に落とすと、<strong>複数 AP 語は phonosyntax では「AP を高々一つずつ持つ複数の終端ノード」として扱われる</strong>。語と語の間の構造は、たとえば \([[X\ X']\ Y]\) だったり \([X\ [Y\ Y']]\) だったりする(\(X\,X'\) は語 \(x\)、\(Y\,Y'\) は語 \(y\) の AP)。</p>
+<p>この枠組みを phonosyntax に落とすと、<strong>複数 AP トークンは phonosyntax では「AP を高々一つずつ持つ複数の終端ノード」として扱われる</strong>。トークンとトークンの間の構造は、たとえば \([[X\ X']\ Y]\) だったり \([X\ [Y\ Y']]\) だったりする(\(X\,X'\) はトークン \(x\)、\(Y\,Y'\) はトークン \(y\) の AP)。</p>
 
 <p>なぜ AP 単位で phonosyntax を回すかというと、それが $-理論の要請だから。もし<strong>一つの AP が phonosyntax ノードの最大サイズ</strong>なら、(merge が一回でも起きるかぎり)どの AP 境界も、派生のどこかで必ず入力文字列の端として現れることが保証される ―― だから AP に敏感なサブルーチンが自然に立てられる。これによって、トリミングは「AP に敏感な merge-sensitive 音韻ルールの<strong>副産物(epiphenomenon)</strong>」として説明でき、独立のマッピング規則として立てる必要がなくなる。</p>
 
 <h3>仁徳天皇 vs 東京ディズニーシー、決着</h3>
-<p>語内部の merge 関係も語彙指定の一部だと考える。$-slot を曲折アクセント(\(\hat{\ }\))で示すと、語 \([X\ [Y\ |\hat Z]]\) で <span class="dollar">$</span>-slot の \(|\hat Z\) が <span class="dollar">$</span> を受けると、$-propagation により \(X\) と \(Y\) にも <span class="dollar">$</span> が回る。一方、語 \([[X\ Y]\ |\hat Z]\) なら(他の条件が同じでも)<span class="dollar">$</span> は \(|\hat Z\) と \(X\) にしか付かない(真ん中の \(Y\) は逃げる)。これは §5 の右枝型 / 左枝型の対比とまったく同じ理屈だ。</p>
+<p>トークン内部の merge 関係も語彙指定の一部だと考える。$-slot を曲折アクセント(\(\hat{\ }\))で示すと、トークン \([X\ [Y\ |\hat Z]]\) で <span class="dollar">$</span>-slot の \(|\hat Z\) が <span class="dollar">$</span> を受けると、$-propagation により \(X\) と \(Y\) にも <span class="dollar">$</span> が回る。一方、トークン \([[X\ Y]\ |\hat Z]\) なら(他の条件が同じでも)<span class="dollar">$</span> は \(|\hat Z\) と \(X\) にしか付かない(真ん中の \(Y\) は逃げる)。これは §5 の右枝型 / 左枝型の対比とまったく同じ理屈だ。</p>
 
 <div class="def">
   <span class="tag">語彙指定</span>

@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Linearity of Meaning の解説</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  renderMathInElement(document.body, {
+    delimiters: [
+      {left: "\\[", right: "\\]", display: true},
+      {left: "\\(", right: "\\)", display: false}
+    ]
+  });
+});
+</script>
+<style>
+  :root{
+    --ink:#2b2b33; --sub:#6b6b78; --line:#e3e0da; --bg:#faf8f4;
+    --accent:#7a5c3e; --box:#f2efe8; --note:#fbf6ec;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif;
+    line-height:1.9; font-size:16px;
+  }
+  .wrap{max-width:760px; margin:0 auto; padding:56px 22px 96px;}
+  h1{font-size:26px; line-height:1.4; margin:0 0 6px; letter-spacing:.01em;}
+  .lead{color:var(--sub); font-size:14px; margin:0 0 40px;}
+  h2{font-size:20px; margin:52px 0 14px; padding-bottom:8px; border-bottom:2px solid var(--accent); color:var(--accent);}
+  h3{font-size:16px; margin:30px 0 8px;}
+  p{margin:12px 0;}
+  .box{background:var(--box); border:1px solid var(--line); border-radius:10px; padding:16px 18px; margin:18px 0;}
+  .note{background:var(--note); border-left:4px solid #d8b878; border-radius:0 8px 8px 0; padding:12px 16px; margin:18px 0; font-size:15px;}
+  .formula{background:#fff; border:1px solid var(--line); border-radius:8px; padding:14px 16px; margin:14px 0; overflow-x:auto;}
+  table{border-collapse:collapse; width:100%; margin:16px 0; font-size:15px; background:#fff;}
+  th,td{border:1px solid var(--line); padding:8px 10px; text-align:left;}
+  th{background:var(--box); font-weight:600;}
+  code{background:#efece5; padding:1px 5px; border-radius:4px; font-size:14px;}
+  ul{margin:10px 0; padding-left:22px;}
+  li{margin:5px 0;}
+  .small{font-size:13px; color:var(--sub);}
+  .sym{font-family:"Latin Modern Math","Cambria Math",serif;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>Linearity of Meaning の内容と意義</h1>
+<p class="lead">Claude により生成。／ Semantics of Tokyo Japanese の続き。教育ローマ字を少し知っている人向けのまとめ。</p>
+
+<p>この文書は2つの部分でできている。第1部 <strong>Types</strong> は用語の改訂で、形式体系そのものは変えない。第2部 <strong>Linearity</strong> は、Semantics に出てきた意味の基底構造を1つの線形パターンに一般化する提案。以下、順番に見る。</p>
+
+<h2>第1部　Types（用語の改訂）</h2>
+
+<p>出発点は Semantics の Convention 4.1。中身はこう書かれている。</p>
+
+<div class="box">
+<strong>Convention 4.1</strong><br>
+role は直前の serial を取って、role つきの serial を作る。role のある serial とない serial は別のタイプとして扱う。parallelizer が取れるのは role のある方だけ。
+</div>
+
+<p>angle bracket <span class="sym">⟨ ⟩</span> は「中身のタイプを返す関数」。Convention 4.1 の要点は3つ。</p>
+<ul>
+<li><span class="sym">⟨X⟩</span> と <span class="sym">⟨<sub>R</sub>⟩</span> がこの順で隣り合うと merge できる。</li>
+<li>merge すると <span class="sym">⟨<sub>R</sub>X⟩</span> になる。</li>
+<li>parallelizer が左向きに取れるのは <span class="sym">⟨<sub>R</sub>X⟩</span> の方で、<span class="sym">⟨X⟩</span> は取れない。</li>
+</ul>
+
+<div class="formula">
+\[ \langle X\rangle \quad \langle {}_R\rangle \qquad \langle {}_R X\rangle \;=\; \left\langle \frac{{}_R A \cdot_R X}{\,{}_R B \cdot_R Y\,} \right\rangle \;\neq\; \langle X\rangle \]
+</div>
+
+<p>旧用語では、<span class="sym">⟨X⟩</span>、<span class="sym">⟨<sub>R</sub>X⟩</span>、そして上の分数形（vinculum を持つ形）を、3つとも区別せず serial と呼んでいた。でも Convention 4.1 が言うとおり、<span class="sym">⟨X⟩</span> だけは扱いが違う（parallelizer に取ってもらえない）。同じ名前だと、この違いが名前から見えない。そこで名前を分ける。</p>
+
+<div class="box">
+<ul style="margin:0;">
+<li><span class="sym">⟨X⟩</span> を <strong>bud</strong> と呼ぶ。</li>
+<li><span class="sym">⟨<sub>R</sub>X⟩</span> を <strong>flower</strong> と呼ぶ。</li>
+<li>分数形 <span class="sym">\({}_R A\cdot_R X \,/\, {}_R B\cdot_R Y\)</span> を <strong>cyme</strong> と呼ぶ。</li>
+<li><strong>serial</strong> は flower と cyme をまとめて指す言葉。bud は含まない。</li>
+</ul>
+</div>
+
+<h3>Figure 1.1（旧用語・新用語・記号の対応）</h3>
+<table>
+<tr><th>旧用語</th><th>新用語</th><th>記号</th></tr>
+<tr><td>Serial <span class="sym">⟨X⟩</span></td><td>Bud</td><td>B</td></tr>
+<tr><td>Role <span class="sym">⟨<sub>R</sub>⟩</span></td><td>Role</td><td><sub>R</sub></td></tr>
+<tr><td>Serial <span class="sym">⟨<sub>R</sub>X⟩</span></td><td>Serial</td><td>S</td></tr>
+<tr><td>Parallel</td><td>Parallel</td><td>P</td></tr>
+<tr><td>Parallelizer</td><td>Parallelizer</td><td>[S : P]</td></tr>
+<tr><td>Mood</td><td>Mood</td><td>M</td></tr>
+<tr><td>Root node</td><td>Root node</td><td>ROOT</td></tr>
+</table>
+
+<p class="small">parallelizer と parallel の定義は Semantics から引き継ぎ。parallelizer は「左に記号＋コロン＋両側に記号を持つ vinculum」の形。例は <span class="sym">\(\langle X : \frac{\text{iscute}}{\lnot\text{iscute}}\rangle\)</span> で、タイプは [S : P]。parallel は「両側に記号を持つ vinculum」で、例は <span class="sym">\(\langle \frac{\text{iscute}}{\lnot\text{iscute}}\rangle\)</span>、タイプは P。parallelizer は serial を取って parallel を作る。serial は mood M と merge でき、clause の末尾で root node ROOT ができる。</p>
+
+<h3>Rule 1.1（clause 内の merge 制約）</h3>
+<p>記号だけで書くと次の4本。<span class="sym">\(X, Y : Z\)</span> は「X, Y がこの順で merge して Z になる」の意味。</p>
+<div class="formula">
+\[ B, {}_R : S \qquad S,\, [S:P] : P \qquad P, P : S \qquad S, M : \text{ROOT} \]
+</div>
+<p>merge は入力ノードを結果ノードでその場（in situ）に置き換える。これらのルール自体は新しくない。Semantics に既に出ている（Convention 4.1 を採用する前の形で書かれていたもの）。</p>
+
+<div class="note">
+第1部で実際に変わったのは名前だけ。形式体系は変わらない。ポイントは、<strong>merge 規則に現れる区別（bud か serial か）と、現れない区別（flower か cyme か。この2つは同じタイプ S）を、名前のレベルで整理した</strong>こと。flower と cyme が同じ S なので、その違いは merge 規則には出てこない。
+</div>
+
+<h2>第2部　Linearity</h2>
+
+<p>ここが新しい提案。東京日本語で観察された意味基底構造を、形式的に一般化する。著者ははっきり限定をつけている。「この一般化は言語の性質の一部を反映していると期待するが、どの範囲まで成り立つかの証拠は今の時点では出さない」。</p>
+
+<h3>Definition 2.1　Rhipidial clause</h3>
+<p>Semantics に出てくる clause は全部、次の線形パターンになっている。上付きの変数は繰り返し回数。</p>
+<div class="formula">
+\[ \big[\, [B, {}_R, [S:P]]^{\,i},\; B, {}_R, [S:P]^{\,i},\; M \,\big] \]
+</div>
+<p>つまり、<span class="sym">[B, <sub>R</sub>, [S:P]]</span> が i 回開いて、真ん中に B, <sub>R</sub> があり、右側に [S:P] が i 回閉じて、最後に mood M が来る。この形の clause を <strong>rhipidial clause</strong> と呼ぶ。</p>
+
+<p class="small">rhipidium は植物学の用語で、枝が同じ平面に並ぶ扇形の cyme（集散花序）のこと。bud / flower / cyme という語もこの体系がすでに使っている植物系の語で、rhipidial はその線上にある命名。</p>
+
+<div class="note">
+すべての rhipidial clause は Rule 1.1 を満たす。ただし逆は成り立たない。そして、東京日本語の文に <strong>non-rhipidial な clause が出てくるかどうかは、まだ分かっていない</strong>（未解決の問題として置かれている）。
+</div>
+
+<h3>関係節と index mood</h3>
+<p>1つの文が複数の clause からできることもある。関係節（relative clause）の root node は、<strong>index mood</strong> という特別な mood が serial と merge して得られる。それがさらに bud と merge して bud を作り、その bud が外側の clause の一部になる。関係節まわりの規則は Semantics の Convention 4.2（index role の規則）として与えられていて、index の番号が一致するときだけ bud ができ、番号が合わないときや index でない role のときは merge が失敗する、という形になっている。</p>
+
+<h3>Rule 2.1（sentence 内の merge 制約）</h3>
+<p>Rule 1.1 と Convention 4.2 をまとめると、文レベルの merge 制約が得られる。Rule 1.1 の4本に、関係節を外側に取り込む1本が加わる。</p>
+<div class="formula">
+\[ B, {}_R : S \qquad S,\, [S:P] : P \qquad P, P : S \]
+\[ S, M : \text{ROOT} \qquad \text{ROOT},\, B : B \]
+</div>
+<p>最後の <span class="sym">ROOT, B : B</span> が、関係節の root と後続の bud が merge して bud になる規則。</p>
+
+<h3>Definition 2.2　Rhipidial sentence</h3>
+<p>Rule 2.1 を使うと、全部の clause が rhipidial であるような文を定義できる。それが <strong>rhipidial sentence</strong>。文の意味基底は次の線形構造。上付きの変数は繰り返し回数。</p>
+<div class="formula">
+\[ \big[\, [B, {}_R, [S:P]]^{\,i},\; B, {}_R, [S:P]^{\,i},\; M \,\big] \]
+</div>
+<p>この中に出てくる bud B は、それ自体を次の線形構造で置き換えてもよい。置き換える文字列のほうは、末尾に B が付く。</p>
+<div class="formula">
+\[ \big[\, [B, {}_R, [S:P]]^{\,j},\; B, {}_R, [S:P]^{\,j},\; M,\; B \,\big] \]
+</div>
+<p>変数 i, j と B について、同じ規則が再帰的に当てはまる。つまり関係節を通して、rhipidial な構造が bud として文の中に入れ子で埋め込まれ、それが再帰する。</p>
+
+<h2>この文書の意義</h2>
+<p>文書から実際に言えることを整理すると、こうなる。</p>
+<ul>
+<li>第1部：名前の改訂によって、merge 規則で別扱いされる区別（bud と serial）が名前から見えるようになった。旧用語は3つ全部 serial で、この区別が名前に出ていなかった。flower と cyme は同じタイプ S なので、その違いは merge 規則には現れない。</li>
+<li>第2部：Semantics で記述された clause が、例外なく1つの線形パターン（rhipidial）に収まる、という一般化。clause も sentence も同じ扇形の型で書け、関係節の再帰で入れ子になる。merge 規則も clause 用の Rule 1.1 と sentence 用の Rule 2.1 に統一される。</li>
+<li>留保：著者自身が「non-rhipidial な clause があるかは未知」と書いている。だから主張は「Semantics で記述した範囲は全部この形」であって、「東京日本語の全部の文がこの形」ではない。</li>
+</ul>
+
+<hr style="border:none; border-top:1px solid var(--line); margin:40px 0 16px;">
+<p class="small">参照：Iida, J. 2026. Semantics of Tokyo Japanese, ver. 6.5.5.<br>
+rhipidium の植物学的意味は Merriam-Webster ほか一般の植物学用語集に基づく（この文書の主張ではなく、語の一般的な意味の補足）。</p>
+
+</div>
+</body>
+</html>

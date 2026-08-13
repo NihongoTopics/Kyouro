@@ -1,47 +1,301 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="description" content="Kyouro (教育ローマ字) offers a novel linguistics approach to Tokyo Japanese. 
-                                    It includes a formal theory of phonology, syntax, and semantics.
-                                    Proposing a New Romanization System of Japanese introduces phonology, syntax, and spelling guidelines.
-                                    Semantics of Tokyo Japanese introduces semantics. 
-                                    Other relevant materials are available in the repository.
-                                    The phonological theory claims that Tokyo Japanese is a contour tone language, 
-                                    that the syllable structure is maximally CCGVG, 
-                                    and that externalization involves a two-step process:
-                                    first, the syntax tree is converted into a phonological tree,
-                                    and then the phonological tree is converted into a prosodic tree of moras, syllables, APs, and IPs.
-                                    The semantics theory proposes a new framework of formal semmantics, 
-                                    which handles semantics of the neutral and the exhaustive readings of ga, among other things.
-                                    Kyouro is desgined for linguists, language learners,teachers, and anyone interested in the Japanese language.
-                                    ">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Kyouro: A romanization and description of Tokyo Japanese</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Kyouro (教育ローマ字) offers a novel linguistics approach to Tokyo Japanese.
+                                  It includes a formal theory of phonology, syntax, and semantics.
+                                  Proposing a New Romanization System of Japanese introduces phonology, syntax, and spelling guidelines.
+                                  Semantics of Tokyo Japanese introduces semantics.
+                                  Other relevant materials are available in the repository.
+                                  The phonological theory claims that Tokyo Japanese is a contour tone language,
+                                  that the syllable structure is maximally CCGVG,
+                                  and that externalization involves a two-step process:
+                                  first, the syntax tree is converted into a phonological tree,
+                                  and then the phonological tree is converted into a prosodic tree of moras, syllables, APs, and IPs.
+                                  The semantics theory proposes a new framework of formal semantics,
+                                  which handles semantics of the neutral and the exhaustive readings of ga, among other things.
+                                  Kyouro is designed for linguists, language learners, teachers, and anyone interested in the Japanese language.">
+<title>Kyouro: A romanization and description of Tokyo Japanese</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+html,body{margin:0;background:#08080a;overflow-x:hidden}
+body{-webkit-font-smoothing:antialiased;color:#f2f1ee;font-family:"Helvetica Neue",Helvetica,Arial,sans-serif}
+a{color:#f2f1ee;text-decoration:none}
+a:hover{color:#fff}
+::selection{background:#3a3a42;color:#fff}
+
+.page{min-height:100vh;background:#08080a;padding:0 28px 96px;box-sizing:border-box}
+.head{max-width:1360px;margin:0 auto;padding:44px 0 30px;display:flex;flex-direction:column;gap:20px}
+.head h1{margin:0;font-size:19px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:#f2f1ee}
+.main{max-width:1360px;margin:0 auto;display:flex;flex-direction:column;gap:64px}
+.cat h2{margin:0 0 22px;font-size:13px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:#e6e5e1}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,160px);justify-content:start;align-items:start;gap:34px 18px;perspective:1200px}
+
+.doc{display:block;position:relative;--w:160px}
+
+/* Every document gets the same transparent cell, so the captions line up.
+   --h is the page height at a 160px width, taken from the PDF's own aspect ratio:
+   the page is scaled to fit inside the cell and rests on its bottom edge.
+   Only the page itself is white; the leftover room in the cell stays background. */
+.cell{position:relative;width:var(--w);height:207.5px;display:flex;align-items:flex-end}
+
+/* the pool of light on the floor beneath the sheet */
+.glow{position:absolute;left:-22px;bottom:-40px;width:204px;height:66px;pointer-events:none;
+  background:radial-gradient(50% 50% at 50% 35%,rgba(255,255,255,.4) 0%,rgba(255,255,255,.19) 42%,rgba(255,255,255,.05) 72%,rgba(255,255,255,0) 100%);
+  transform-origin:50% 40%;filter:blur(11px);opacity:1;
+  transition:transform .45s cubic-bezier(.2,.7,.2,1),filter .45s cubic-bezier(.2,.7,.2,1),opacity .45s cubic-bezier(.2,.7,.2,1)}
+/* as the sheet rises the pool stays on the floor: spreads, softens, dims */
+.doc:hover .glow,.doc:focus-visible .glow{transform:scale(1.1,1.06);filter:blur(14px);opacity:.85}
+
+.stack{position:relative;width:var(--w);height:var(--h);transform-style:preserve-3d;
+  transition:transform .45s cubic-bezier(.2,.7,.2,1)}
+.doc:hover .stack,.doc:focus-visible .stack{transform:translateY(-8px) scale(1.03)}
+.sheet-3,.sheet-2{position:absolute;width:var(--w);height:var(--h);border-radius:2px}
+.sheet-3{left:5px;top:5px;background:#1a1a1f}
+.sheet-2{left:2.5px;top:2.5px;background:#26262c}
+.sheet-1{position:relative;z-index:1;width:var(--w);height:var(--h);background:#faf9f6;border-radius:2px;overflow:hidden;
+  box-shadow:0 0 0 .5px rgba(255,255,255,.13),0 12px 22px -4px rgba(255,255,255,.12),0 30px 50px 0 rgba(255,255,255,.067);
+  transition:box-shadow .45s cubic-bezier(.2,.7,.2,1)}
+.doc:hover .sheet-1,.doc:focus-visible .sheet-1{
+  box-shadow:0 0 0 .5px rgba(255,255,255,.13),0 16px 30px -2px rgba(255,255,255,.087),0 38px 66px 4px rgba(255,255,255,.05)}
+.sheet-1 img{display:block;width:100%;height:100%;object-fit:cover}
+
+.meta{position:relative;z-index:2;padding:22px 1px 0}
+.meta .title{font-family:Spectral,Georgia,serif;font-size:12.5px;line-height:1.35;color:#dcdbd6}
+.doc:hover .meta .title,.doc:focus-visible .meta .title{color:#fff}
+
+.doc:focus{outline:none}
+.doc:focus-visible .sheet-1{outline:1px solid rgba(255,255,255,.55);outline-offset:2px}
+</style>
 </head>
 <body>
-  <main class="container">
-    <div class="paper-card">
-      <div class="thumb-wrap" tabindex="0" role="button" onclick="window.location='Proposing a new romanization system of Japanese (book).pdf';">
-        <img class="paper-thumb" src="thumbnails/Proposing a new romanization system of Japanese (book).png" alt="Proposing a new romanization system of Japanese (book)">
+<div class="page">
+  <header class="head">
+    <h1>Kyouro</h1>
+  </header>
+
+  <main class="main">
+
+    <section class="cat" id="general">
+      <h2>General</h2>
+      <div class="grid">
+        <a class="doc" style="--h:120px" href="Proposing a new romanization system of Japanese (book).pdf">
+          <div class="cell">
+            <div class="glow"></div>
+            <div class="stack">
+              <div class="sheet-3"></div><div class="sheet-2"></div>
+              <div class="sheet-1"><img src="thumbnails/proposing-book.png" alt=""></div>
+            </div>
+          </div>
+          <div class="meta"><div class="title">Proposing a New Romanization System of Japanese (book)</div></div>
+        </a>
+        <a class="doc" style="--h:207.5px" href="教育ローマ字新ガイド（レジュメ版）4.0.pdf">
+          <div class="cell">
+            <div class="glow"></div>
+            <div class="stack">
+              <div class="sheet-3"></div><div class="sheet-2"></div>
+              <div class="sheet-1"><img src="thumbnails/guide-resume.png" alt=""></div>
+            </div>
+          </div>
+          <div class="meta"><div class="title">教育ローマ字新ガイド（レジュメ版）</div></div>
+        </a>
+        <a class="doc" style="--h:90px" href="教育ローマ字新ガイド（スライド版）4.0.pdf">
+          <div class="cell">
+            <div class="glow"></div>
+            <div class="stack">
+              <div class="sheet-3"></div><div class="sheet-2"></div>
+              <div class="sheet-1"><img src="thumbnails/guide-slides.png" alt=""></div>
+            </div>
+          </div>
+          <div class="meta"><div class="title">教育ローマ字新ガイド（スライド版）</div></div>
+        </a>
       </div>
-    </div>
-    <div class="paper-card">
-      <div class="thumb-wrap" tabindex="0" role="button" onclick="window.location='Semantics of Tokyo Japanese.pdf';">
-        <img class="paper-thumb" src="thumbnails/Semantics of Tokyo Japanese.png" alt="Semantics of Tokyo Japanese">
+    </section>
+
+    <section class="cat" id="phonology">
+      <h2>Phonology</h2>
+      <div class="grid">
+        <a class="doc" style="--h:207.5px" href="Concatenation.pdf">
+          <div class="cell">
+            <div class="glow"></div>
+            <div class="stack">
+              <div class="sheet-3"></div><div class="sheet-2"></div>
+              <div class="sheet-1"><img src="thumbnails/concatenation.png" alt=""></div>
+            </div>
+          </div>
+          <div class="meta"><div class="title">Concatenation, $-Theory, and Phonosyntax</div></div>
+        </a>
+        <a class="doc" style="--h:90px" href="新しい日本語ローマ字の提案 4.1.pdf">
+          <div class="cell">
+            <div class="glow"></div>
+            <div class="stack">
+              <div class="sheet-3"></div><div class="sheet-2"></div>
+              <div class="sheet-1"><img src="thumbnails/atarashii-teian.png" alt=""></div>
+            </div>
+          </div>
+          <div class="meta"><div class="title">新しい日本語ローマ字の提案</div></div>
+        </a>
+        <a class="doc" style="--h:90px" href="Proposing a new romanization system of Japanese (slides) 4.1.pdf">
+          <div class="cell">
+            <div class="glow"></div>
+            <div class="stack">
+              <div class="sheet-3"></div><div class="sheet-2"></div>
+              <div class="sheet-1"><img src="thumbnails/proposing-slides.png" alt=""></div>
+            </div>
+          </div>
+          <div class="meta"><div class="title">Proposing a new romanization system of Japanese</div></div>
+        </a>
       </div>
-    </div>
-    <div class="paper-card">
-      <div class="thumb-wrap" tabindex="0" role="button" onclick="window.location='tools/index.html';">
-        <img class="paper-thumb" src="thumbnails/Tools.png" alt="Tools">
+    </section>
+
+    <section class="cat" id="semantics">
+      <h2>Semantics</h2>
+      <div class="grid">
+        <a class="doc" style="--h:207.5px" href="Non-exhaustivity.pdf">
+          <div class="cell">
+            <div class="glow"></div>
+            <div class="stack">
+              <div class="sheet-3"></div><div class="sheet-2"></div>
+              <div class="sheet-1"><img src="thumbnails/non-exhaustivity.png" alt=""></div>
+            </div>
+          </div>
+          <div class="meta"><div class="title">「ムギはかわいい」の非対称性と非総記性</div></div>
+        </a>
+        <a class="doc" style="--h:120.5px" href="Semantics of Tokyo Japanese.pdf">
+          <div class="cell">
+            <div class="glow"></div>
+            <div class="stack">
+              <div class="sheet-3"></div><div class="sheet-2"></div>
+              <div class="sheet-1"><img src="thumbnails/semantics.png" alt=""></div>
+            </div>
+          </div>
+          <div class="meta"><div class="title">Semantics of Tokyo Japanese</div></div>
+        </a>
+        <a class="doc" style="--h:207.5px" href="Linearity.pdf">
+          <div class="cell">
+            <div class="glow"></div>
+            <div class="stack">
+              <div class="sheet-3"></div><div class="sheet-2"></div>
+              <div class="sheet-1"><img src="thumbnails/linearity.png" alt=""></div>
+            </div>
+          </div>
+          <div class="meta"><div class="title">Linearity of Meaning</div></div>
+        </a>
       </div>
-    </div>
-    <div class="paper-card">
-      <div class="thumb-wrap" tabindex="0" role="button" onclick="window.location='https://github.com/NihongoTopics/Kyouro/';">
-        <img class="paper-thumb" src="thumbnails/View Repository.png" alt="View Repository">
+    </section>
+
+    <section class="cat" id="syntax">
+      <h2>Syntax</h2>
+      <div class="grid">
+        <a class="doc" style="--h:207.5px" href="de.pdf">
+          <div class="cell">
+            <div class="glow"></div>
+            <div class="stack">
+              <div class="sheet-3"></div><div class="sheet-2"></div>
+              <div class="sheet-1"><img src="thumbnails/de.png" alt=""></div>
+            </div>
+          </div>
+          <div class="meta"><div class="title">条件を示すコピュラ de C2\A4/A3 に関する覚書</div></div>
+        </a>
       </div>
-    </div>
+    </section>
+
+    <section class="cat" id="spelling">
+      <h2>Spelling</h2>
+      <div class="grid">
+        <a class="doc" style="--h:207.5px" href="Version Seven.pdf">
+          <div class="cell">
+            <div class="glow"></div>
+            <div class="stack">
+              <div class="sheet-3"></div><div class="sheet-2"></div>
+              <div class="sheet-1"><img src="thumbnails/version-seven.png" alt=""></div>
+            </div>
+          </div>
+          <div class="meta"><div class="title">Version Seven</div></div>
+        </a>
+      </div>
+    </section>
+
+    <section class="cat" id="miscellaneous">
+      <h2>Miscellaneous</h2>
+      <div class="grid">
+        <a class="doc" style="--h:120px" href="Proposing a new romanization system of Japanese (book) Japanese version.pdf">
+          <div class="cell">
+            <div class="glow"></div>
+            <div class="stack">
+              <div class="sheet-3"></div><div class="sheet-2"></div>
+              <div class="sheet-1"><img src="thumbnails/proposing-book-ja.png" alt=""></div>
+            </div>
+          </div>
+          <div class="meta"><div class="title">Proposing a New Romanization System of Japanese (日本語版)</div></div>
+        </a>
+        <a class="doc" style="--h:90px" href="教育ローマ字の理論：音節1.pdf">
+          <div class="cell">
+            <div class="glow"></div>
+            <div class="stack">
+              <div class="sheet-3"></div><div class="sheet-2"></div>
+              <div class="sheet-1"><img src="thumbnails/onsetsu.png" alt=""></div>
+            </div>
+          </div>
+          <div class="meta"><div class="title">教育ローマ字の理論：音節</div></div>
+        </a>
+        <a class="doc" style="--h:207.5px" href="詞と語について 3.0.pdf">
+          <div class="cell">
+            <div class="glow"></div>
+            <div class="stack">
+              <div class="sheet-3"></div><div class="sheet-2"></div>
+              <div class="sheet-1"><img src="thumbnails/shi-to-go.png" alt=""></div>
+            </div>
+          </div>
+          <div class="meta"><div class="title">詞と語について</div></div>
+        </a>
+        <a class="doc" style="--h:207.5px" href="形容詞について 4.1.pdf">
+          <div class="cell">
+            <div class="glow"></div>
+            <div class="stack">
+              <div class="sheet-3"></div><div class="sheet-2"></div>
+              <div class="sheet-1"><img src="thumbnails/keiyoushi.png" alt=""></div>
+            </div>
+          </div>
+          <div class="meta"><div class="title">形容詞について</div></div>
+        </a>
+        <a class="doc" style="--h:207.5px" href="屈折境界の廃止 3.3.pdf">
+          <div class="cell">
+            <div class="glow"></div>
+            <div class="stack">
+              <div class="sheet-3"></div><div class="sheet-2"></div>
+              <div class="sheet-1"><img src="thumbnails/kussetsu-kyoukai.png" alt=""></div>
+            </div>
+          </div>
+          <div class="meta"><div class="title">屈折境界の廃止</div></div>
+        </a>
+        <a class="doc" style="--h:207.5px" href="ローマ数字で示される境界の呼称.pdf">
+          <div class="cell">
+            <div class="glow"></div>
+            <div class="stack">
+              <div class="sheet-3"></div><div class="sheet-2"></div>
+              <div class="sheet-1"><img src="thumbnails/roman-suuji-kyoukai.png" alt=""></div>
+            </div>
+          </div>
+          <div class="meta"><div class="title">ローマ数字で示される境界の呼称</div></div>
+        </a>
+        <a class="doc" style="--h:120.5px" href="教育ローマ字で読む「太陽と風」3.0.pdf">
+          <div class="cell">
+            <div class="glow"></div>
+            <div class="stack">
+              <div class="sheet-3"></div><div class="sheet-2"></div>
+              <div class="sheet-1"><img src="thumbnails/taiyou-to-kaze-kyouro.png" alt=""></div>
+            </div>
+          </div>
+          <div class="meta"><div class="title">太陽と風</div></div>
+        </a>
+      </div>
+    </section>
+
   </main>
+</div>
 </body>
 </html>

@@ -1,0 +1,18 @@
+# Claude
+.claude/
+CLAUDE.local.md
+.mcp.json
+
+# macOS
+.DS_Store
+.DS_Store?
+._*
+.AppleDouble
+.LSOverride
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.fseventsd
+.VolumeIcon.icns
+.apdisk
+Icon?
